@@ -1,5 +1,6 @@
 import type { StorybookConfig } from '@storybook/react-vite'
 import react from '@vitejs/plugin-react'
+import svgr from 'vite-plugin-svgr'
 
 function isReactRefreshPlugin(plugin: unknown): boolean {
   if (!plugin) return false
@@ -32,6 +33,7 @@ const config: StorybookConfig = {
           plugins: ['@emotion/babel-plugin'],
         },
       }),
+      svgr(),
     ]
 
     config.optimizeDeps = {

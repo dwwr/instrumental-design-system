@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1658 931" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: black;
+        stroke: rgb(246, 183, 48);
+        stroke-miterlimit: 10;
+        stroke-width: 10px;
+      }
+    </style>
+  </defs>
+  <path class="cls-1" d="M5.54,16.59c.02-6.61,5.38-11.96,11.99-11.97l448.66-.39c4.57-.07,8.78,2.45,10.87,6.51,7.36,14.35,24.88,47.99,33.65,60.54l1130.67.38c6.63,0,12,5.37,12,12v830.46c0,6.66-5.42,12.04-12.08,12l-1515.35-.28c-6.63,0-12-5.37-12-12v-618.28l-97.72-.49c-6.21.05-11.29-4.94-11.35-11.15l.66-267.34Z"/>
+</svg>

@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'Eva-Matisse_Classic';
+  src: url('../assets/EVA-Matisse_Classic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 /*
   Josh's Custom CSS Reset
   https://www.joshwcomeau.com/css/custom-css-reset/
