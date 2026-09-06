@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { glowText } from '../../Readout1'
-import { SegmentedBar } from '../SegmentedBar'
+import { SegmentedBar } from '../segmented-bar/SegmentedBar'
 
 const listItem = css`
   display: contents;
