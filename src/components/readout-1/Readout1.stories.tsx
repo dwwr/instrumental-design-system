@@ -28,22 +28,37 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    title: 'MENTAL TOXICITY LEVEL',
+    title: 'TOXICITY LEVEL',
     kpi1Key: 'ELAPSED TIME',
     kpi1Value: '120 min.',
     kpi2Key: 'L.C.L. PURITY',
     kpi2Value: '99.9999989%',
     items: [
-      { subject: 'subject', subjectNumber: '00', subjectLabel: 'FIRST.C', value: 25 },
-      { subject: 'subject', subjectNumber: '01', subjectLabel: 'THIRD.C', value: 50 },
-      { subject: 'subject', subjectNumber: '02', subjectLabel: 'SECOND.C', value: 85 },
+      {
+        subject: 'subject',
+        subjectNumber: '00',
+        subjectLabel: 'FIRST.C',
+        value: 25,
+      },
+      {
+        subject: 'subject',
+        subjectNumber: '01',
+        subjectLabel: 'THIRD.C',
+        value: 50,
+      },
+      {
+        subject: 'subject',
+        subjectNumber: '02',
+        subjectLabel: 'SECOND.C',
+        value: 85,
+      },
     ],
   },
 }
 
 export const Empty: Story = {
   args: {
-    title: 'MENTAL TOXICITY LEVEL',
+    title: 'TOXICITY LEVEL',
     kpi1Key: 'ELAPSED TIME',
     kpi1Value: '120 min.',
     kpi2Key: 'L.C.L. PURITY',
