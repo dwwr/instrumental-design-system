@@ -2,10 +2,11 @@
 
 import {
   downTriangleStyle,
+  hexagonContentStyle,
   hexagonOffStyle,
   hexagonOnStyle,
   textStyle,
-  upTriangleStyle
+  upTriangleStyle,
 } from './styles'
 
 export interface HexagonProps {
@@ -17,9 +18,11 @@ export interface HexagonProps {
 export const Hexagon: React.FC<HexagonProps> = ({ isOn, outlineOffHexagons, text }) => {
   return (
     <div css={isOn ? hexagonOnStyle : hexagonOffStyle(outlineOffHexagons)}>
-      <div css={upTriangleStyle} />
-      <span css={textStyle}>{text}</span>
-      <div css={downTriangleStyle} />
+      <div css={hexagonContentStyle}>
+        <div css={upTriangleStyle} />
+        <span css={textStyle}>{text}</span>
+        <div css={downTriangleStyle} />
+      </div>
     </div>
   )
 }

@@ -21,16 +21,31 @@ export const hexagonInnerLayer = css`
   background-color: black;
 `
 
+/** Outer box: must be inline-block for shape-outside (Temani / Safari). */
 export const hexagonStyle = css`
   width: var(--s);
   margin: var(--mv) var(--mh);
   height: calc(var(--s) * var(--r));
-  display: inline-flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.45rem;
+  display: inline-block;
+  vertical-align: top;
+  font-size: initial;
+  box-sizing: border-box;
   ${hexagonClipPath()};
   margin-bottom: calc(var(--mv) - var(--vc));
+  position: relative;
+`
+
+/** Inner flex stack for triangle / label / triangle */
+export const hexagonContentStyle = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 2;
 `
 
 export const hexagonOnStyle = css`
@@ -79,9 +94,6 @@ export const textStyle = css`
   z-index: 2;
   font-family: 'Helvetica', monospace;
   font-size: 0.65rem;
-  align-items: center;
-  justify-content: center;
-  align-self: center;
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.04rem;
