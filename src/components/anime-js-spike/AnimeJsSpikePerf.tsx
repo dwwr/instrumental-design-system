@@ -1,8 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { glowText } from '../../Readout1'
 import { createScope, createTimer, utils } from 'animejs'
 import { useEffect, useRef } from 'react'
+
+/**
+ * Performance-minded meter: same visual contract as Readout1ListItem /
+ * AnimeJsSpike, but ticks update the DOM directly — no React re-render
+ * per jitter frame.
+ *
+ * Strategy:
+ * - Precompute segment colors once
+ * - Mount 40 segments once; keep element refs
+ * - createTimer (anime) drives the 100ms snap loop
+ * - Paint only segments whose on/off state changed
+ * - value prop is read via ref so the Storybook slider doesn't restart the loop
+ */
 
 const INTERVAL_MS = 100
 const RANGE = 2
@@ -24,24 +36,24 @@ const SEGMENT_COLORS = Array.from({ length: SEGMENT_COUNT }, (_, i) =>
   getGradientColor(i, SEGMENT_COUNT)
 )
 
-const listItem = css`
-  display: contents;
+const rootStyle = css`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  background: #0a0a0a;
+  color: #f6b730;
+  font-family: Helvetica, Arial, sans-serif;
 `
 
-const label = css`
-  padding: 0.5rem;
-  font-size: clamp(0.4rem, 2vw, 1rem);
-  text-align: center;
-  justify-self: end;
-  letter-spacing: -0.5px;
-  line-height: 1;
-  margin-right: 0.5rem;
-  text-transform: uppercase;
-`
-
-const number = css`
-  font-size: clamp(1.5rem, 8vw, 4rem);
-  letter-spacing: -2px;
+const barsStyle = css`
+  height: 160px;
+  display: flex;
+  align-items: center;
+  width: 100%;
 `
 
 const segmentBase = css`
@@ -53,26 +65,20 @@ const segmentBase = css`
   box-shadow: none;
 `
 
-const gradientBar = css`
-  height: 100%;
-  display: flex;
-  align-items: center;
-  width: 100%;
+const hintStyle = css`
+  font-size: 0.75rem;
+  opacity: 0.55;
+  max-width: 32rem;
+  text-align: center;
+  line-height: 1.4;
 `
 
-export interface Readout1ListItemProps {
-  subject: string
-  subjectNumber: string
-  subjectLabel: string
-  value: number
+export interface AnimeJsSpikePerfProps {
+  /** 0–100 fill level (same as Readout1ListItem `value`) */
+  value?: number
 }
 
-export const Readout1ListItem: React.FC<Readout1ListItemProps> = ({
-  subject,
-  subjectNumber,
-  subjectLabel,
-  value,
-}) => {
+export const AnimeJsSpikePerf = ({ value = 50 }: AnimeJsSpikePerfProps) => {
   const root = useRef<HTMLDivElement>(null)
   const track = useRef<HTMLDivElement>(null)
   const valueRef = useRef(value)
@@ -87,6 +93,7 @@ export const Readout1ListItem: React.FC<Readout1ListItemProps> = ({
       trackEl.querySelectorAll<HTMLDivElement>('.spike-bar')
     )
 
+    // Sentinel so the first paint always writes every segment
     let lastLevel = Number.NEGATIVE_INFINITY
 
     const paint = (level: number) => {
@@ -115,6 +122,7 @@ export const Readout1ListItem: React.FC<Readout1ListItemProps> = ({
       paint(base + utils.random(-RANGE, RANGE))
     }
 
+    // Initial paint at the current value (no deviation yet)
     paint((valueRef.current / 100) * SEGMENT_COUNT)
 
     const scope = createScope({ root }).add(() => {
@@ -130,28 +138,23 @@ export const Readout1ListItem: React.FC<Readout1ListItemProps> = ({
     }
   }, [])
 
+  // Slider: recenter immediately without tearing down the timer
   useEffect(() => {
     paintRef.current((value / 100) * SEGMENT_COUNT)
   }, [value])
 
   return (
-    <div css={listItem}>
-      <div css={[label, glowText]}>
-        <div>{subject}</div>
-        <div css={number}>{subjectNumber}</div>
-        <div>{subjectLabel}</div>
-      </div>
-      <div
-        ref={el => {
-          track.current = el
-          root.current = el
-        }}
-        css={gradientBar}
-      >
+    <div ref={root} css={rootStyle}>
+      <div ref={track} css={barsStyle}>
         {Array.from({ length: SEGMENT_COUNT }, (_, i) => (
           <div key={i} className="spike-bar" css={segmentBase} />
         ))}
       </div>
+      <p css={hintStyle}>
+        Perf path: <code>createTimer</code> + direct DOM paints (no{' '}
+        <code>setState</code> per tick). Visual match to the list-item meter;
+        only segments that flip on/off are touched.
+      </p>
     </div>
   )
 }
