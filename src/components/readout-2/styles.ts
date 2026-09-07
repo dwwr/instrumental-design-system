@@ -29,13 +29,24 @@ const calculations = css`
   --f: calc(2 * var(--s) * var(--r) + 4 * var(--mv) - 2 * var(--vc) - 2px);
 `
 
+const pulse = keyframes`
+  0%, 100% {
+    filter: blur(0.9px) brightness(1);
+  }
+  50% {
+    filter: blur(0.9px) brightness(1.3);
+  }
+`
+
 export const mainStyle = css`
   ${calculations};
   background-color: black;
   /* Row flex (default): stretches .container on the cross axis → definite height
      for the float’s percentage height. Do not set flex-direction: column. */
   display: flex;
-  filter: blur(0.9px);
+  /* Single filter animation for the whole grid (not per-hex). */
+  filter: blur(0.9px) brightness(1);
+  animation: ${pulse} 1s ease-in-out infinite;
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -43,15 +54,6 @@ export const mainStyle = css`
   width: 100%;
   height: 100%;
   overflow: hidden;
-`
-
-export const pulse = keyframes`
-  0%, 100% {
-    filter: brightness(1) drop-shadow(0 0 5px var(--emergency-color));
-  }
-  50% {
-    filter: brightness(1.3) drop-shadow(0 0 15px var(--emergency-color));
-  }
 `
 
 export const containerStyle = css`
@@ -70,5 +72,15 @@ export const containerStyle = css`
       #0000 0 calc(var(--f) - 3px),
       #000 0 var(--f)
     );
+  }
+
+  /* Outlined off-hexes: set data-outline on this container */
+  &[data-outline='true'] [data-hex][data-on='false'] {
+    background-color: var(--emergency-color);
+
+    /* Restore inset ring suppressed on plain off hexes */
+    &::before {
+      content: '';
+    }
   }
 `
