@@ -14,6 +14,8 @@ const layout = css`
   grid-auto-rows: repeat(8, 1fr);
   background-color: black;
   position: relative;
+  box-sizing: border-box;
+  padding: 12px;
   column-gap: clamp(0.25rem, 1vw, 1rem);
   filter: blur(0.5px);
   user-select: none;
@@ -28,7 +30,11 @@ const layout = css`
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at top right, rgba(214, 63, 43, 0.95), #8be8ba);
+    background: radial-gradient(
+      circle at top right,
+      rgba(214, 63, 43, 0.95),
+      #8be8ba
+    );
     mix-blend-mode: overlay;
     pointer-events: none;
     z-index: 1;
@@ -41,14 +47,24 @@ const layout = css`
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(transparent 0%, rgba(255, 0, 0, 0.15) 50%, transparent 100%);
-    animation: ${scanlineAnimation} 0.167s linear infinite, ${flickerAnimation} 0.167s infinite;
+    background: linear-gradient(
+      transparent 0%,
+      rgba(255, 0, 0, 0.15) 50%,
+      transparent 100%
+    );
+    animation: ${scanlineAnimation} 0.167s linear infinite,
+      ${flickerAnimation} 0.167s infinite;
     pointer-events: none;
     z-index: 2;
   }
 `
 
-const gridArea = (colStart: number, colEnd: number, rowStart: number, rowEnd?: number) => css`
+const gridArea = (
+  colStart: number,
+  colEnd: number,
+  rowStart: number,
+  rowEnd?: number
+) => css`
   grid-column-start: ${colStart};
   grid-column-end: ${colEnd};
   grid-row-start: ${rowStart};
@@ -67,7 +83,11 @@ export const Readout4: React.FC<Readout4Props> = () => {
   return (
     <div css={layout}>
       {Array.from({ length: 7 }).map((_, i) => (
-        <div key={i} css={gridArea(1, 2, 7 - i)} style={{ alignSelf: 'start', height: '100%' }}>
+        <div
+          key={i}
+          css={gridArea(1, 2, 7 - i)}
+          style={{ alignSelf: 'start', height: '100%' }}
+        >
           <PlotlineSegment value={i} hide={i === 0} />
         </div>
       ))}
@@ -77,7 +97,11 @@ export const Readout4: React.FC<Readout4Props> = () => {
         <DataLabel text="External Communications" squeeze showIndicator />
       </div>
       {Array.from({ length: 7 }).map((_, i) => (
-        <div key={i} css={gridArea(1 + i, 2 + i, 8 - i)} style={{ height: '100%' }}>
+        <div
+          key={i}
+          css={gridArea(1 + i, 2 + i, 8 - i)}
+          style={{ height: '100%' }}
+        >
           <BarSegment number={i} flicker={i === 1} green={i <= 1} />
         </div>
       ))}
@@ -85,7 +109,10 @@ export const Readout4: React.FC<Readout4Props> = () => {
         <BorderLine text="Border Line" />
       </div>
       <div css={gridArea(5, 8, 8)}>
-        <DataLabel text="Reserve Energy Remaining" bottomText="EVA-01 : Entry Plug" />
+        <DataLabel
+          text="Reserve Energy Remaining"
+          bottomText="EVA-01 : Entry Plug"
+        />
       </div>
     </div>
   )
