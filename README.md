@@ -45,7 +45,7 @@ npx vercel
 
 Follow the prompts; `vercel.json` supplies build/output. Use `npx vercel --prod` for production.
 
-Requires **Node 20+** (see `engines` in `package.json`).
+Requires **Node 22** (`engines` in `package.json`).
 
 ## Components
 

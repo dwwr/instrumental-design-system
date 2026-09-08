@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "engines": {
-    "node": ">=20"
+    "node": "22.x"
   },
   "scripts": {
     "dev": "storybook dev -p 6006 --initial-path \"/?path=/story/showcase--canvas\"",
