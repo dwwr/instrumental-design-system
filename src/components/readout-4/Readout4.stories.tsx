@@ -8,6 +8,11 @@ const meta: Meta<typeof Readout4> = {
   parameters: {
     layout: 'fullscreen',
   },
+  argTypes: {
+    value: {
+      control: { type: 'range', min: 0, max: 6, step: 1 },
+    },
+  },
   render: args => (
     <div
       style={{
@@ -25,5 +30,7 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
-  args: {},
+  args: {
+    value: 1,
+  },
 }
