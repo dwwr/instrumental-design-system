@@ -15,6 +15,11 @@ const preview: Preview = {
     backgrounds: {
       disable: true,
     },
+    options: {
+      storySort: {
+        order: ['Showcase', 'Components', '*'],
+      },
+    },
   },
   decorators: [
     (Story: React.FC) => (

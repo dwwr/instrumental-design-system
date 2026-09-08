@@ -28,7 +28,7 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    title: 'TOXICITY LEVEL',
+    title: 'PURITY LEVEL',
     kpi1Key: 'ELAPSED TIME',
     kpi1Value: '120 min.',
     kpi2Key: 'L.C.L. PURITY',
@@ -58,7 +58,7 @@ export const Default: Story = {
 
 export const Empty: Story = {
   args: {
-    title: 'TOXICITY LEVEL',
+    title: 'PURITY LEVEL',
     kpi1Key: 'ELAPSED TIME',
     kpi1Value: '120 min.',
     kpi2Key: 'L.C.L. PURITY',

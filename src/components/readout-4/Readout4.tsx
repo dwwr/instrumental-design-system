@@ -14,12 +14,31 @@ const layout = css`
   grid-auto-rows: repeat(8, 1fr);
   background-color: black;
   position: relative;
+  box-sizing: border-box;
+  padding: 12px;
   column-gap: clamp(0.25rem, 1vw, 1rem);
   filter: blur(0.5px);
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+      circle at top right,
+      rgba(214, 63, 43, 0.95),
+      #8be8ba
+    );
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: 1;
+  }
 
   &::before {
     content: '';

@@ -2,58 +2,64 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { SegmentedBar } from './SegmentedBar'
 
+const variants: { name: string; value: number }[] = [
+  { name: 'Near Empty', value: 0 },
+  { name: 'Quarter', value: 25 },
+  { name: 'Half', value: 50 },
+  { name: 'Three Quarters', value: 75 },
+  { name: 'Full', value: 100 },
+]
+
 const meta: Meta<typeof SegmentedBar> = {
   title: 'Components/Readout1/SegmentedBar',
   component: SegmentedBar,
-  argTypes: {
-    value: {
-      control: { type: 'range', min: 0, max: 100, step: 1 },
-    },
+  parameters: {
+    layout: 'fullscreen',
   },
-  render: args => (
-    <div
-      style={{
-        width: '100%',
-        height: '200px',
-        backgroundColor: 'black',
-        padding: '1rem',
-        boxSizing: 'border-box',
-      }}
-    >
-      <SegmentedBar {...args} />
-    </div>
-  ),
 }
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Empty: Story = {
-  args: {
-    value: 0,
-  },
-}
-
-export const Quarter: Story = {
-  args: {
-    value: 25,
-  },
-}
-
-export const Half: Story = {
-  args: {
-    value: 50,
-  },
-}
-
-export const ThreeQuarters: Story = {
-  args: {
-    value: 75,
-  },
-}
-
-export const Full: Story = {
-  args: {
-    value: 100,
-  },
+export const Stories: Story = {
+  render: () => (
+    <div
+      style={{
+        width: '100%',
+        minHeight: '100vh',
+        backgroundColor: 'black',
+        boxSizing: 'border-box',
+        padding: '2rem',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0.75rem',
+      }}
+    >
+      {variants.map(({ name, value }) => (
+        <div key={name}>
+          <div
+            style={{
+              color: 'rgba(255, 255, 255, 0.55)',
+              fontFamily: 'Helvetica, sans-serif',
+              fontSize: '0.75rem',
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+              marginBottom: '0.35rem',
+            }}
+          >
+            {name}
+          </div>
+          <div
+            style={{
+              width: '100%',
+              height: '80px',
+              boxSizing: 'border-box',
+            }}
+          >
+            <SegmentedBar value={value} />
+          </div>
+        </div>
+      ))}
+    </div>
+  ),
 }

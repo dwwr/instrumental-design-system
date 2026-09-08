@@ -16,7 +16,11 @@ function isReactRefreshPlugin(plugin: unknown): boolean {
 }
 
 const config: StorybookConfig = {
-  stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  // Showcase first so the index default (root URL) resolves to it.
+  stories: [
+    '../src/showcase/Showcase.stories.tsx',
+    '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+  ],
   addons: [
     '@chromatic-com/storybook',
     '@storybook/addon-docs',
