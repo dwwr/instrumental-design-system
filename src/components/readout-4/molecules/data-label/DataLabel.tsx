@@ -40,6 +40,27 @@ const glowText = css`
   overflow: hidden;
   text-align: center;
   word-spacing: 0.1rem;
+
+  /*
+   * Firefox / Safari: taller line box under Helvetica sits glyphs high in the
+   * flex-centered label (same class of bug as Readout3 DataLabel + scaleY).
+   * Tighten metrics and nudge down; keep Blink on the rules above.
+   * padding-top (not transform) so squeeze/spaced scaleX still works.
+   */
+  @supports (-moz-appearance: none) or (font: -apple-system-body) {
+    display: inline-block;
+    line-height: 1;
+    padding-top: 0.2em;
+    box-sizing: content-box;
+  }
+
+  /* Firefox paints text-shadow hotter than Blink/WebKit */
+  @supports (-moz-appearance: none) {
+    text-shadow:
+      0 0 1px rgba(255, 0, 0, 0.45),
+      0 0 3px rgba(255, 0, 0, 0.35),
+      0 0 5px rgba(255, 0, 0, 0.25);
+  }
 `
 
 const squeezeText = css`
