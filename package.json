@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "storybook dev -p 6006",
-    "storybook": "storybook dev -p 6006",
+    "dev": "storybook dev -p 6006 --initial-path \"/?path=/story/showcase--canvas\"",
+    "storybook": "storybook dev -p 6006 --initial-path \"/?path=/story/showcase--canvas\"",
     "build": "storybook build",
     "build-storybook": "storybook build",
     "lint": "eslint src .storybook --ext .ts,.tsx"
