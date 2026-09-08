@@ -22,9 +22,22 @@ export const glowTextStyle = css`
   color: rgb(251, 181, 19);
   text-transform: uppercase;
   text-shadow: 0 0 1px #ff0000, 0 0 4px #ff0000, 0 0 6px #ff0000;
-  text-wrap: nowrap;
+  white-space: nowrap;
   margin-bottom: 0.65rem;
   transform: scaleY(3) scaleX(0.95);
+
+  /*
+   * Firefox-only: taller line-height:normal + scaleY shifts glyphs up, and
+   * text-shadow paints hotter. Keep Blink/WebKit on the original rules above.
+   */
+  @supports (-moz-appearance: none) {
+    display: inline-block;
+    line-height: 1;
+    text-shadow:
+      0 0 1px rgba(255, 0, 0, 0.45),
+      0 0 3px rgba(255, 0, 0, 0.35),
+      0 0 5px rgba(255, 0, 0, 0.25);
+  }
 `
 
 export const textStretchStyle = css`
