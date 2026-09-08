@@ -25,7 +25,7 @@ This repo is configured as a static Storybook app via [`vercel.json`](./vercel.j
 
 | Setting | Value |
 |---------|--------|
-| Install | `npm ci` |
+| Install | `npm install` |
 | Build | `npm run build-storybook` |
 | Output | `storybook-static` |
 | Landing | `/` → `/?path=/story/showcase--canvas` |
@@ -45,7 +45,7 @@ npx vercel
 
 Follow the prompts; `vercel.json` supplies build/output. Use `npx vercel --prod` for production.
 
-Requires **Node 22** (`engines` in `package.json`).
+Requires **Node 24** (`engines` in `package.json`).
 
 ## Components
 
