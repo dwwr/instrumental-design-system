@@ -101,9 +101,12 @@ const borderLineArea = css`
 
 const energyLabelArea = gridArea(5, 8, 8)
 
-export interface Readout4Props {}
+export interface Readout4Props {
+  /** Active segment index: that bar flickers; bars at or below it render green. */
+  value?: number
+}
 
-export const Readout4: React.FC<Readout4Props> = () => {
+export const Readout4: React.FC<Readout4Props> = ({ value = 1 }) => {
   return (
     <div css={layout}>
       {plotlineAreas.map((area, i) => (
@@ -118,7 +121,7 @@ export const Readout4: React.FC<Readout4Props> = () => {
       </div>
       {barAreas.map((area, i) => (
         <div key={`bar-${i}`} css={area}>
-          <BarSegment number={i} flicker={i === 1} green={i <= 1} />
+          <BarSegment number={i} flicker={i === value} green={i <= value} />
         </div>
       ))}
       <div css={borderLineArea}>
