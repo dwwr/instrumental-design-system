@@ -15,8 +15,8 @@ export interface OverlayProps {
 export const Overlay: React.FC<OverlayProps> = ({ labels }) => {
   return (
     <div css={overlayStyle}>
-      {labels.map((label) => (
-        <DataLabel {...label} />
+      {labels.map((label, i) => (
+        <DataLabel key={i} {...label} />
       ))}
     </div>
   )
