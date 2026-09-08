@@ -77,38 +77,76 @@ const flexColumn = css`
   gap: 0.3rem;
 `
 
-export interface Readout4Props {}
+const plotlineCellBase = css`
+  align-self: start;
+  height: 100%;
+`
 
-export const Readout4: React.FC<Readout4Props> = () => {
+const barCellBase = css`
+  height: 100%;
+`
+
+const borderCellBase = css`
+  align-self: end;
+`
+
+const plotlineAreas = Array.from(
+  { length: 7 },
+  (_, i) =>
+    css`
+      ${gridArea(1, 2, 7 - i)};
+      ${plotlineCellBase};
+    `
+)
+
+const barAreas = Array.from(
+  { length: 7 },
+  (_, i) =>
+    css`
+      ${gridArea(1 + i, 2 + i, 8 - i)};
+      ${barCellBase};
+    `
+)
+
+const systemLabelsArea = css`
+  ${gridArea(2, 5, 3, 5)};
+  ${flexColumn};
+`
+
+const borderLineArea = css`
+  ${gridArea(1, 8, 7)};
+  ${borderCellBase};
+`
+
+const energyLabelArea = gridArea(5, 8, 8)
+
+export interface Readout4Props {
+  /** Active segment index: that bar flickers; bars at or below it render green. */
+  value?: number
+}
+
+export const Readout4: React.FC<Readout4Props> = ({ value = 1 }) => {
   return (
     <div css={layout}>
-      {Array.from({ length: 7 }).map((_, i) => (
-        <div
-          key={i}
-          css={gridArea(1, 2, 7 - i)}
-          style={{ alignSelf: 'start', height: '100%' }}
-        >
+      {plotlineAreas.map((area, i) => (
+        <div key={`plot-${i}`} css={area}>
           <PlotlineSegment value={i} hide={i === 0} />
         </div>
       ))}
-      <div css={[gridArea(2, 5, 3, 5), flexColumn]}>
-        <DataLabel text="Life Support System" showIndicator flicker />
+      <div css={systemLabelsArea}>
+        <DataLabel text="Life Support System" showIndicator />
         <DataLabel text="Link Control System" showIndicator />
         <DataLabel text="External Communications" squeeze showIndicator />
       </div>
-      {Array.from({ length: 7 }).map((_, i) => (
-        <div
-          key={i}
-          css={gridArea(1 + i, 2 + i, 8 - i)}
-          style={{ height: '100%' }}
-        >
-          <BarSegment number={i} flicker={i === 1} green={i <= 1} />
+      {barAreas.map((area, i) => (
+        <div key={`bar-${i}`} css={area}>
+          <BarSegment number={i} flicker={i === value} green={i <= value} />
         </div>
       ))}
-      <div css={gridArea(1, 8, 7)} style={{ alignSelf: 'end' }}>
+      <div css={borderLineArea}>
         <BorderLine text="Border Line" />
       </div>
-      <div css={gridArea(5, 8, 8)}>
+      <div css={energyLabelArea}>
         <DataLabel
           text="Reserve Energy Remaining"
           bottomText="EVA-01 : Entry Plug"
