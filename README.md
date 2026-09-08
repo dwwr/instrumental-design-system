@@ -17,7 +17,35 @@ To build a static Storybook site:
 npm run build-storybook
 ```
 
-Output is written to `storybook-static/`.
+Output is written to `storybook-static/`. Dev and production both open on **Showcase → Canvas** first.
+
+## Deploy (Vercel)
+
+This repo is configured as a static Storybook app via [`vercel.json`](./vercel.json):
+
+| Setting | Value |
+|---------|--------|
+| Install | `npm ci` |
+| Build | `npm run build-storybook` |
+| Output | `storybook-static` |
+| Landing | `/` → `/?path=/story/showcase--canvas` |
+
+### Option A — Vercel Git integration
+
+1. Push this repo to GitHub/GitLab/Bitbucket.
+2. [Import the project](https://vercel.com/new) in Vercel.
+3. Leave framework as Other / use overrides from `vercel.json` (no need to change build settings).
+4. Deploy. Production and preview URLs will land on the Showcase.
+
+### Option B — Vercel CLI
+
+```bash
+npx vercel
+```
+
+Follow the prompts; `vercel.json` supplies build/output. Use `npx vercel --prod` for production.
+
+Requires **Node 20+** (see `engines` in `package.json`).
 
 ## Components
 

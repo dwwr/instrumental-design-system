@@ -39,9 +39,14 @@ type Story = StoryObj
 const showcaseLabelStyle: React.CSSProperties = {
   color: 'rgba(255, 255, 255, 0.55)',
   fontFamily: 'Helvetica, sans-serif',
-  fontSize: '0.75rem',
+  fontSize: '1rem',
   letterSpacing: '0.04em',
   textTransform: 'uppercase',
+}
+
+const showcaseSublabelStyle: React.CSSProperties = {
+  ...showcaseLabelStyle,
+  fontSize: '0.75rem',
 }
 
 const useIsMobile = (query = '(max-width: 768px)') => {
@@ -128,7 +133,7 @@ const Readout2Row = () => {
           <div key={name} style={{ flex: 1, minWidth: 0 }}>
             <div
               style={{
-                ...showcaseLabelStyle,
+                ...showcaseSublabelStyle,
                 textAlign: 'start',
                 marginBottom: '0.35rem',
               }}
@@ -326,7 +331,7 @@ const DataLabelStories = () => (
   >
     {dataLabelVariants.map(({ name, args }) => (
       <div key={name} style={{ flexShrink: 0 }}>
-        <div style={{ ...showcaseLabelStyle, marginBottom: '0.35rem' }}>
+        <div style={{ ...showcaseSublabelStyle, marginBottom: '0.35rem' }}>
           {name}
         </div>
         <div
@@ -542,13 +547,13 @@ const Readout4MoleculesDemo = () => {
           {barSegmentColors.map(({ name }) => (
             <div
               key={`col-${name}`}
-              style={{ ...showcaseLabelStyle, justifySelf: 'center' }}
+              style={{ ...showcaseSublabelStyle, justifySelf: 'center' }}
             >
               {name}
             </div>
           ))}
           {barSegmentMotions.flatMap(({ name: motionName, flicker }) => [
-            <div key={`row-${motionName}`} style={showcaseLabelStyle}>
+            <div key={`row-${motionName}`} style={showcaseSublabelStyle}>
               {motionName}
             </div>,
             ...barSegmentColors.map(({ name: colorName, green }) => (
