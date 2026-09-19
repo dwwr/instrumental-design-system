@@ -6,6 +6,17 @@ import TimerMask from './timer-mask.svg?react'
 import { TimerLabel } from './molecules/TimerLabel'
 
 const orangeYellow = 'rgb(246, 183, 48)'
+const tickColor = 'rgb(214, 242, 182)'
+
+type ModeId = 'stop' | 'slow' | 'normal' | 'racing'
+
+const MODES: { id: ModeId; label: string }[] = [
+  { id: 'stop', label: 'Stop' },
+  { id: 'slow', label: 'Slow' },
+  { id: 'normal', label: 'Normal' },
+  { id: 'racing', label: 'Racing' },
+]
+
 const container = css`
   display: flex;
   flex-direction: column;
@@ -22,8 +33,10 @@ const container = css`
 
 const svg = css`
   position: absolute;
+  inset: 0;
   height: 100%;
   width: 100%;
+  pointer-events: none;
 `
 
 const content = css`
@@ -32,170 +45,239 @@ const content = css`
   flex-direction: column;
   height: 500px;
   width: 900px;
-  /* background-color: red; */
+`
+
+const chromeOverlay = css`
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+`
+
+const headerHairline = css`
+  position: absolute;
+  top: 22%;
+  left: 3%;
+  width: 28%;
+  height: 1px;
+  background-color: ${orangeYellow};
+  opacity: 0.55;
 `
 
 const header = css`
-  /* display: flex; */
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: flex-start;
+  padding: 0.65rem 0.75rem 0 0.65rem;
+  min-height: 5.5rem;
 `
 
 const kanjiLabelContainer = css`
   display: flex;
   flex-direction: column;
-  margin-left: 0.5rem;
-  height: 100%;
   z-index: 1;
   width: fit-content;
   transform: scaleX(0.66);
-  transform-origin: bottom left;
+  transform-origin: top left;
+  flex-shrink: 0;
+  /* recover layout space lost to scaleX so English sits beside the visual kanji */
+  margin-right: calc(-0.34 * 380px);
 `
 
 const kanjiLabel = css`
-  display: flex;
+  display: block;
   width: fit-content;
   color: ${orangeYellow};
-  border-radius: 10px;
   font-size: 66px;
   font-family: 'Eva-Matisse_Classic', sans-serif;
-  z-index: 0;
   word-spacing: 0.1rem;
   letter-spacing: -0.25rem;
-  line-height: 1.2;
-  /* text-wrap: nowrap; */
+  line-height: 1.15;
+  text-shadow: 0 0 6px rgba(246, 183, 48, 0.45);
 `
 
 const kanjiLabelSmall = css`
   ${kanjiLabel};
   font-size: 40px;
-  line-height: 1.8;
+  line-height: 1.5;
+`
+
+const englishHeader = css`
+  color: ${orangeYellow};
+  font-family: Helvetica, Arial, sans-serif;
+  text-transform: uppercase;
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -3px;
+  white-space: nowrap;
+  margin-left: 0.35rem;
+  /* sit below the mask top edge, aligned to the kanji baseline like the original WIP */
+  margin-top: 2.15rem;
+  align-self: flex-start;
+  z-index: 3;
+  text-shadow: 0 0 4px rgba(246, 183, 48, 0.35);
 `
 
 const timerContainer = css`
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  height: 70%;
-  /* width: 100%; */
-  /* width: 100%; */
-  margin-top: -3rem;
-  margin-left: 4.5rem;
-  /* background-color: red; */
-  z-index: 100;
-`
-
-const labelText = css`
-  color: ${orangeYellow};
-  font-family: 'Helvetica';
-  text-transform: uppercase;
-  font-size: 32px;
-  text-wrap: nowrap;
-  align-self: flex-end;
-  /* margin-left: 1rem; */
-  letter-spacing: -3px;
-  z-index: 3;
-`
-
-const modeContainer = css`
-  width: 60%;
-  margin-top: 2rem;
-  margin-left: 4rem;
-  display: flex;
-  align-items: center;
   justify-content: space-between;
+  flex: 1;
+  margin-top: -1.5rem;
+  margin-left: 4.5rem;
+  margin-right: 0.5rem;
+  padding-bottom: 1.5rem;
+  z-index: 100;
+  min-height: 0;
+`
+
+const modeRail = css`
+  width: 62%;
+  margin-top: 0.55rem;
+  margin-left: 3.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+`
+
+const modeTicksRow = css`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.35rem;
+  height: 8px;
+`
+
+const modeGapTickPair = css`
+  display: flex;
+  gap: 3px;
+  align-items: center;
+`
+
+const modeGapTick = css`
+  width: 1.5px;
+  height: 7px;
+  background-color: ${orangeYellow};
+`
+
+const modeStrip = css`
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 0.7rem;
+  padding: 0.4rem 0.55rem;
 `
 
 const modeItem = css`
   display: flex;
   flex-direction: column;
-  /* width: 100%; */
   align-items: center;
   text-align: center;
-  height: 90px;
-  width: 110px;
+  height: 58px;
+  flex: 1;
+  max-width: 120px;
   background-color: black;
-  border: 2px solid ${orangeYellow};
-  border-radius: 5px;
+  border: 1.5px solid ${orangeYellow};
+  border-radius: 0;
   color: ${orangeYellow};
-  margin-left: 1rem;
+  box-sizing: border-box;
+  overflow: hidden;
 `
 
 const modeItemText = css`
-  font-family: 'Helvetica';
+  font-family: Helvetica, Arial, sans-serif;
   text-transform: uppercase;
-  font-size: 22px;
-  transform-origin: top left;
-  transform: scaleY(1.5);
+  font-size: 18px;
+  transform: scaleY(1.35);
+  transform-origin: center top;
   line-height: 1;
-  letter-spacing: -0.05rem;
-  margin: 0.25rem;
+  letter-spacing: -0.04rem;
+  margin-top: 0.35rem;
+  font-weight: 700;
 `
 
 const activeIndicator = css`
-  margin-top: 0.5rem;
-  height: 30px;
-  width: 90%;
-  background-color: red;
+  margin-top: auto;
+  height: 48%;
+  width: 100%;
+  background-color: #e00000;
+`
+
+const inactiveIndicator = css`
+  margin-top: auto;
+  height: 48%;
+  width: 100%;
+  background-color: transparent;
 `
 
 const labelColumn = css`
   display: flex;
   flex-direction: column;
-  height: 100%;
+  justify-content: flex-start;
+  align-self: flex-start;
+  height: auto;
   width: 200px;
-  margin-right: 1rem;
-  & > * {
-    margin-bottom: 0.5rem;
-  }
-  & > *:last-child {
-    margin-top: auto;
-  }
+  flex-shrink: 0;
+  /* pull up to align with the hairline under ACTIVE TIME REMAINING */
+  margin-top: -3.25rem;
+  margin-right: 0.25rem;
+  gap: 0.4rem;
 `
 
 const spacer = css`
-  /* height: 1px; */
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-shrink: 0;
 `
 
 const point = css`
-  height: 5px;
+  height: 14px;
   width: 2px;
-  background-color: rgb(214, 242, 182);
+  background-color: ${tickColor};
 `
 
-export interface Readout5Props {}
+export interface Readout5Props {
+  activeMode?: ModeId
+  isPaused?: boolean
+  pausedColor?: string
+}
 
-export const Readout5 = (_props: Readout5Props) => (
+export const Readout5 = ({
+  activeMode = 'racing',
+  isPaused = true,
+  pausedColor = orangeYellow,
+}: Readout5Props) => (
   <div css={container}>
     <div css={content}>
       <div css={svg}>
         <TimerMask />
       </div>
+      <ChromeOverlay />
       <div css={header}>
         <div css={kanjiLabelContainer}>
-          <span css={kanjiLabel}>
-            <span>活動限界まで</span>
-            <span css={labelText} style={{ marginLeft: '1rem' }}>
-              {' '}
-              Active Time Remaining:
-            </span>
-          </span>
+          <span css={kanjiLabel}>活動限界まで</span>
           <div css={kanjiLabelSmall}>あと</div>
         </div>
+        <span css={englishHeader}>Active Time Remaining:</span>
       </div>
       <div css={timerContainer}>
         <Timer
           milliseconds={298560}
-          isPaused={true}
+          isPaused={isPaused}
           runningColor={orangeYellow}
-          pausedColor={'green'}
+          pausedColor={pausedColor}
           completedColor={'rgb(209, 7, 10)'}
         />
         <div css={labelColumn}>
           <Spacer />
-          <TimerLabel japaneseText="内部" englishText="Internal" showIndicator />
+          <TimerLabel
+            japaneseText="内部"
+            englishText="Internal"
+            showIndicator
+          />
           <Spacer />
           <TimerLabel
             japaneseText="主電源供給システム"
@@ -203,28 +285,36 @@ export const Readout5 = (_props: Readout5Props) => (
             small
           />
           <Spacer />
-          <Spacer />
         </div>
       </div>
     </div>
-    <div css={modeContainer}>
-      <div css={modeItem}>
-        <div css={modeItemText}>Stop </div>
-        <div css={activeIndicator} />
+    <div css={modeRail}>
+      <ModeTicksRow />
+      <div css={modeStrip}>
+        {MODES.map(({ id, label }) => (
+          <div key={id} css={modeItem}>
+            <div css={modeItemText}>{label}</div>
+            <div
+              css={id === activeMode ? activeIndicator : inactiveIndicator}
+            />
+          </div>
+        ))}
       </div>
-      <div css={modeItem}>
-        <div css={modeItemText}>Slow </div>
-        <div css={activeIndicator} />
-      </div>
-      <div css={modeItem}>
-        <div css={modeItemText}>Normal </div>
-        <div css={activeIndicator} />
-      </div>
-      <div css={modeItem}>
-        <div css={modeItemText}>Racing </div>
-        <div css={activeIndicator} />
-      </div>
+      <ModeTicksRow />
     </div>
+  </div>
+)
+
+const MODE_TICK_SLOTS = 5
+
+const ModeTicksRow = () => (
+  <div css={modeTicksRow} aria-hidden>
+    {Array.from({ length: MODE_TICK_SLOTS }, (_, i) => (
+      <div key={i} css={modeGapTickPair}>
+        <div css={modeGapTick} />
+        <div css={modeGapTick} />
+      </div>
+    ))}
   </div>
 )
 
@@ -233,4 +323,10 @@ const Spacer = () => (
     <div css={point} />
     <div css={point} />
   </span>
+)
+
+const ChromeOverlay = () => (
+  <div css={chromeOverlay} aria-hidden>
+    <div css={headerHairline} />
+  </div>
 )

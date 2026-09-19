@@ -9,31 +9,41 @@ const colon = (color: string) => css`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  align-items: center;
   height: 100%;
-  width: 10%;
+  width: 8%;
+  flex-shrink: 0;
+  padding: 12% 0;
+  box-sizing: border-box;
 
   div {
-    width: 100%;
-    height: 5%;
+    width: 55%;
+    aspect-ratio: 1;
+    height: auto;
     background-color: ${color};
-    border-radius: 3px;
+    border-radius: 1px;
     z-index: 1;
+    filter: drop-shadow(0 0 3px ${color});
   }
 `
 
 const numberContainer = css`
   display: flex;
-  width: 66.66%;
+  width: 64%;
   height: 100%;
   align-items: center;
   justify-content: center;
+  gap: 0.15%;
 `
 
 const smallerNumberContainer = css`
-  height: 75%;
-  width: 33.33%;
+  height: 62%;
+  width: 34%;
   display: flex;
-  align-self: end;
+  align-self: flex-end;
+  gap: 0.35%;
+  padding-bottom: 3%;
+  box-sizing: border-box;
 `
 
 export interface TimerProps {

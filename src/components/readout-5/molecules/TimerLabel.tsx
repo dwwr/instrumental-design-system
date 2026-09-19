@@ -17,22 +17,27 @@ const container = css`
   border: 1px solid ${orangeYellow};
   border-radius: 2px;
   height: fit-content;
-  text-wrap: nowrap;
+  width: 100%;
+  box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
 `
 
 const content = css`
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: flex-start;
   letter-spacing: -0.05rem;
   z-index: 0;
   line-height: 1;
   width: 80%;
+  min-width: 0;
+  padding: 1px 0 2px;
 `
 
 const textBaseStyle = css`
   color: ${orangeYellow};
-  font-family: 'Helvetica';
+  font-family: Helvetica, Arial, sans-serif;
   text-transform: uppercase;
   letter-spacing: -0.1rem;
 `
@@ -53,11 +58,13 @@ const english = css`
 const kanjiLarge = css`
   ${kanji};
   font-size: 80px;
+  line-height: 0.95;
 `
 
 const kanjiSmall = css`
   ${kanji};
   font-size: 40px;
+  line-height: 1;
 `
 
 const squishedBase = css`
@@ -88,13 +95,14 @@ const indicator = css`
     transparent 32px
   );
   width: 20%;
+  align-self: stretch;
 `
 
 export const TimerLabel = ({
   japaneseText,
   englishText,
   showIndicator,
-  small
+  small,
 }: TimerLabelProps) => {
   const kanjiStyle = small ? [kanjiSmall, squishedKanji] : kanjiLarge
   const englishStyle = small ? squishedText : english

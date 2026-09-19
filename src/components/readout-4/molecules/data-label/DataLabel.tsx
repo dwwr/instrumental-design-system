@@ -1,12 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { flickerAnimation } from '../../../animations'
 
 const primaryColor = 'rgb(216, 121, 57)'
-
-const boxFlicker = css`
-  animation: ${flickerAnimation} 0.1s infinite;
-`
 
 const labelContainer = css`
   display: flex;
@@ -16,15 +11,13 @@ const labelContainer = css`
   }
 `
 
-const glowBox = (flicker?: boolean) => css`
+const glowBoxBase = css`
   margin-left: 0.5rem;
   width: clamp(15px, 3vw, 25px);
   height: 100%;
   background-color: ${primaryColor};
   border-radius: 4px;
-  box-shadow: 0 0 20px rgba(214, 63, 43, 0.4), 0 0 20px rgba(214, 63, 43, 0.3),
-    0 0 20px rgba(201, 43, 22, 0.2), 0 0 20px rgba(201, 43, 22, 0.1);
-  ${flicker && boxFlicker}
+  box-shadow: 0 0 20px rgba(214, 63, 43, 0.45);
 `
 
 const label = css`
@@ -42,11 +35,32 @@ const glowText = css`
   line-height: 1.2;
   color: ${primaryColor};
   text-transform: uppercase;
-  text-shadow: 0 0 1px #ff0000, 0 0 4px #ff0000, 0 0 6px #ff0000;
+  text-shadow: 0 0 1px #ff0000, 0 0 5px #ff0000;
   white-space: nowrap;
   overflow: hidden;
   text-align: center;
   word-spacing: 0.1rem;
+
+  /*
+   * Firefox / Safari: taller line box under Helvetica sits glyphs high in the
+   * flex-centered label (same class of bug as Readout3 DataLabel + scaleY).
+   * Tighten metrics and nudge down; keep Blink on the rules above.
+   * padding-top (not transform) so squeeze/spaced scaleX still works.
+   */
+  @supports (-moz-appearance: none) or (font: -apple-system-body) {
+    display: inline-block;
+    line-height: 1;
+    padding-top: 0.2em;
+    box-sizing: content-box;
+  }
+
+  /* Firefox paints text-shadow hotter than Blink/WebKit */
+  @supports (-moz-appearance: none) {
+    text-shadow:
+      0 0 1px rgba(255, 0, 0, 0.45),
+      0 0 3px rgba(255, 0, 0, 0.35),
+      0 0 5px rgba(255, 0, 0, 0.25);
+  }
 `
 
 const squeezeText = css`
@@ -76,7 +90,6 @@ interface DataLabelProps {
   bottomText?: string
   squeeze?: boolean
   showIndicator?: boolean
-  flicker?: boolean
 }
 
 export const DataLabel = ({
@@ -84,7 +97,6 @@ export const DataLabel = ({
   bottomText,
   squeeze,
   showIndicator,
-  flicker
 }: DataLabelProps) => (
   <div css={labelContainer}>
     <div css={label}>
@@ -92,12 +104,14 @@ export const DataLabel = ({
         <>
           <span css={[glowText, squeezeText, boldText]}>{text}</span>
           <div css={divider} />
-          <span css={[glowText, squeeze && squeezeText, boldText, spacedText]}>{bottomText}</span>
+          <span css={[glowText, squeeze && squeezeText, boldText, spacedText]}>
+            {bottomText}
+          </span>
         </>
       ) : (
         <span css={[glowText, squeeze && squeezeText, boldText]}>{text}</span>
       )}
     </div>
-    {showIndicator && <div css={glowBox(flicker)} />}
+    {showIndicator && <div css={glowBoxBase} />}
   </div>
 )

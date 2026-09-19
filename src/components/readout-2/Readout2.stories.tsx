@@ -51,3 +51,26 @@ export const StayOff: Story = {
     outlineOffHexagons: true,
   },
 }
+
+export const FullScreen: Story = {
+  args: {
+    text: 'Emergency',
+    numberOfHexagons: 200,
+  },
+  parameters: {
+    layout: 'fullscreen',
+  },
+  render: args => (
+    <div
+      style={{
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: 'black',
+        overflow: 'hidden',
+      }}
+    >
+      <Readout2 {...args} />
+    </div>
+  ),
+}
+

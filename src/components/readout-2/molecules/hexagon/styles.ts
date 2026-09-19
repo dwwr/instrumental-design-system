@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { pulse } from '../../styles'
 
 const hexagonClipPath = (offset = 0) => css`
   clip-path: polygon(
@@ -21,23 +20,20 @@ export const hexagonInnerLayer = css`
   background-color: black;
 `
 
+/** Outer box: must be inline-block for shape-outside (Temani / Safari).
+ *  On/off is driven by [data-on] so Readout2 can paint without React re-renders. */
 export const hexagonStyle = css`
   width: var(--s);
   margin: var(--mv) var(--mh);
   height: calc(var(--s) * var(--r));
-  display: inline-flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.45rem;
+  display: inline-block;
+  vertical-align: top;
+  font-size: initial;
+  box-sizing: border-box;
   ${hexagonClipPath()};
   margin-bottom: calc(var(--mv) - var(--vc));
-`
-
-export const hexagonOnStyle = css`
-  ${hexagonStyle};
-  background: var(--emergency-color);
-  box-shadow: 0 0 15px var(--emergency-color);
-  animation: ${pulse} 1s ease-in-out infinite;
+  position: relative;
+  background-color: black;
 
   &::before {
     ${hexagonInnerLayer};
@@ -48,40 +44,44 @@ export const hexagonOnStyle = css`
     ${hexagonClipPath(2)};
   }
 
-  &::after {
-    ${hexagonInnerLayer};
-    z-index: 1;
-    top: 4.5px;
-    left: 4.5px;
-    width: calc(100% - 9px);
-    height: calc(100% - 9px);
-    background-color: var(--emergency-color);
-    ${hexagonClipPath(3)};
+  /* Plain off = black-on-black inset; skip the layer. Outlined off restores via container. */
+  &[data-on='false']::before {
+    content: none;
+  }
+
+  &[data-on='true'] {
+    background: var(--emergency-color);
+
+    &::after {
+      ${hexagonInnerLayer};
+      z-index: 1;
+      top: 4.5px;
+      left: 4.5px;
+      width: calc(100% - 9px);
+      height: calc(100% - 9px);
+      background-color: var(--emergency-color);
+      ${hexagonClipPath(3)};
+    }
   }
 `
 
-export const hexagonOffStyle = (outlineOffHexagons: boolean) => css`
-  ${hexagonStyle};
-  background-color: ${outlineOffHexagons ? 'var(--emergency-color)' : 'black'};
-  animation: ${pulse} 1s ease-in-out infinite;
-
-  &::before {
-    ${hexagonInnerLayer};
-    top: 3px;
-    left: 3px;
-    width: calc(100% - 6px);
-    height: calc(100% - 6px);
-    ${hexagonClipPath(2)};
-  }
+/** Inner flex stack for triangle / label / triangle */
+export const hexagonContentStyle = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 2;
 `
 
 export const textStyle = css`
   z-index: 2;
   font-family: 'Helvetica', monospace;
   font-size: 0.65rem;
-  align-items: center;
-  justify-content: center;
-  align-self: center;
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.04rem;

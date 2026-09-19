@@ -5,11 +5,11 @@ const digit = css`
   position: relative;
   width: 100%;
   height: 100%;
+  filter: drop-shadow(0 0 3px currentColor);
 `
 
 const segment = css`
   position: absolute;
-  /* transition: background-color 0.2s; */
 `
 
 const horizontalSegment = css`
@@ -89,13 +89,13 @@ export interface SevenSegmentDisplayProps {
 export const SevenSegmentDisplay: React.FC<SevenSegmentDisplayProps> = ({ number, color }) => {
   const segments = numbers[number] || ''
 
-  const getSegmentStyles = (segmentId: string, ...styles: any[]) => ({
+  const getSegmentStyles = (segmentId: string, ...styles: ReturnType<typeof css>[]) => ({
     css: [segment, ...styles],
-    style: { backgroundColor: segments.includes(segmentId) ? color : undefined }
+    style: { backgroundColor: segments.includes(segmentId) ? color : undefined },
   })
 
   return (
-    <div css={digit}>
+    <div css={digit} style={{ color }}>
       <div {...getSegmentStyles('a', a)} />
       <div {...getSegmentStyles('b', verticalSegment, rightSegments, topSegments)} />
       <div {...getSegmentStyles('c', verticalSegment, rightSegments, bottomSegments)} />

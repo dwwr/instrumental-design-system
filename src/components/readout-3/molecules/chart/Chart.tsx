@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import { useRef } from 'react'
 import { ColumnGroup } from './ColumnGroup'
-import { useColumnValues } from './useColumnValues'
+import { useColumnPaint } from './useColumnPaint'
 
 const chartStyle = css`
   width: 100%;
@@ -32,15 +33,28 @@ export const Chart: React.FC<ChartProps> = ({
   columnGroupSize,
   benchmark,
   deviate,
-  loop
+  loop,
 }) => {
-  const columnValues = useColumnValues(columnGroupSize, benchmark, deviate, loop)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const initialValues = Array.from({ length: columnGroupSize }, () => benchmark ?? 0)
+
+  useColumnPaint({
+    rootRef,
+    numberOfColumns: columnGroupSize,
+    benchmark,
+    deviate,
+    loop,
+  })
 
   return (
-    <div css={chartStyle}>
+    <div ref={rootRef} css={chartStyle} data-chart-paint>
       <div css={columnContainerStyle}>
         {[...Array(columnGroupCount)].map((_, i) => (
-          <ColumnGroup key={i} values={columnValues} numberOfColumns={columnGroupSize} />
+          <ColumnGroup
+            key={i}
+            values={initialValues}
+            numberOfColumns={columnGroupSize}
+          />
         ))}
       </div>
     </div>

@@ -8,15 +8,18 @@ const meta: Meta<typeof Readout5> = {
   parameters: {
     layout: 'fullscreen',
   },
-  render: () => (
+  render: (args) => (
     <div
       style={{
         width: '100vw',
         height: '100vh',
         overflow: 'hidden',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
-      <Readout5 />
+      <Readout5 {...args} />
     </div>
   ),
 }
@@ -24,4 +27,20 @@ const meta: Meta<typeof Readout5> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {}
+/** Amber frozen frame matching the ATR reference (Racing active). */
+export const Default: Story = {
+  args: {
+    activeMode: 'racing',
+    isPaused: true,
+    pausedColor: 'rgb(246, 183, 48)',
+  },
+}
+
+/** Paused green state for comparison. */
+export const PausedGreen: Story = {
+  args: {
+    activeMode: 'racing',
+    isPaused: true,
+    pausedColor: 'green',
+  },
+}

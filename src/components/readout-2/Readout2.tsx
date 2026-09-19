@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { useHexagonStateAndFlash } from './useHexagonStateAndFlash'
-import { containerStyle, mainStyle, pulse } from './styles'
+import { useRef } from 'react'
+import { useHexagonPaint } from './useHexagonPaint'
+import { containerStyle, mainStyle } from './styles'
 import { Hexagon } from './molecules/hexagon/Hexagon'
 
 interface Readout2Props {
@@ -16,17 +17,28 @@ export const Readout2: React.FC<Readout2Props> = ({
   text,
   stayOn,
   stayOff,
-  outlineOffHexagons = false
+  outlineOffHexagons = false,
 }) => {
-  const { hexagonStates, flash } = useHexagonStateAndFlash(numberOfHexagons)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useHexagonPaint({
+    containerRef,
+    numberOfHexagons,
+    stayOn,
+    stayOff,
+  })
 
   return (
-    <div css={[mainStyle, pulse]}>
-      <div css={containerStyle}>
-        {hexagonStates.map((_, i) => {
-          const isOn = stayOn || (!stayOff && (flash || hexagonStates[i] === 1))
-          return <Hexagon key={i} isOn={isOn} outlineOffHexagons={outlineOffHexagons} text={text} />
-        })}
+    <div css={mainStyle}>
+      <div
+        ref={containerRef}
+        css={containerStyle}
+        data-readout2-paint
+        data-outline={outlineOffHexagons ? 'true' : 'false'}
+      >
+        {Array.from({ length: numberOfHexagons }, (_, i) => (
+          <Hexagon key={i} text={text} />
+        ))}
       </div>
     </div>
   )

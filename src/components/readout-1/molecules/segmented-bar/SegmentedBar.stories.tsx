@@ -1,12 +1,6 @@
-/** @jsxImportSource @emotion/react */
+/** @jsxImportSource react */
 import type { Meta, StoryObj } from '@storybook/react'
-import { Readout1ListItem } from './Readout1ListItem'
-
-const baseArgs = {
-  subject: 'subject',
-  subjectNumber: '00',
-  subjectLabel: 'SAMPLE.C',
-} as const
+import { SegmentedBar } from './SegmentedBar'
 
 const variants: { name: string; value: number }[] = [
   { name: 'Near Empty', value: 0 },
@@ -16,9 +10,9 @@ const variants: { name: string; value: number }[] = [
   { name: 'Full', value: 100 },
 ]
 
-const meta: Meta<typeof Readout1ListItem> = {
-  title: 'Components/Readout1/Readout1ListItem',
-  component: Readout1ListItem,
+const meta: Meta<typeof SegmentedBar> = {
+  title: 'Components/Readout1/SegmentedBar',
+  component: SegmentedBar,
   parameters: {
     layout: 'fullscreen',
   },
@@ -57,12 +51,12 @@ export const Stories: Story = {
           </div>
           <div
             style={{
-              display: 'grid',
-              gridTemplateColumns: '10% 90%',
               width: '100%',
+              height: '80px',
+              boxSizing: 'border-box',
             }}
           >
-            <Readout1ListItem {...baseArgs} value={value} />
+            <SegmentedBar value={value} />
           </div>
         </div>
       ))}

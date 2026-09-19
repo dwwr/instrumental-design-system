@@ -54,24 +54,23 @@ export interface ColumnGroupProps {
 
 export const ColumnGroup: React.FC<ColumnGroupProps> = ({ numberOfColumns, values }) => {
   return (
-    <div css={columnGroupStyle}>
+    <div css={columnGroupStyle} data-column-group>
       <div css={columnContainerStyle}>
         <div css={topXAxisStyle}>
           <XAxis numberOfTicks={30} />
         </div>
-        {[...Array(numberOfColumns)].map((_, i) => {
-          return (
-            <Column
-              key={i}
-              value={values[i]}
-              numberOfBars={17}
-              showYAxis={i === 2 || i === 6}
-              numberOfColumns={numberOfColumns}
-            />
-          )
-        })}
+        {[...Array(numberOfColumns)].map((_, i) => (
+          <Column
+            key={i}
+            colIndex={i}
+            value={values[i] ?? 0}
+            numberOfBars={17}
+            showYAxis={i === 2 || i === 6}
+            numberOfColumns={numberOfColumns}
+          />
+        ))}
         <div css={segmentedColumnContainerStyle}>
-          <SegmentedColumn value={values[0]} numberOfBars={17} />
+          <SegmentedColumn value={values[0] ?? 0} numberOfBars={17} />
         </div>
         <div css={xAxisStyle}>
           <XAxis numberOfTicks={30} />
