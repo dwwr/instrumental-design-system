@@ -4,20 +4,13 @@ import { css } from '@emotion/react'
 import { Timer } from './molecules/timer/Timer'
 import TimerMask from './timer-mask.svg?react'
 import { TimerLabel } from './molecules/TimerLabel'
-import { hudTextBlur } from './styles'
+import { ModeRow } from './molecules/mode-row/ModeRow'
+import type { ModeId } from './molecules/mode-row/ModeRow'
+import { HUD_AMBER, hudTextBlur } from './styles'
 
-const orangeYellow = 'rgb(255, 152, 20)'
+const orangeYellow = HUD_AMBER
 const tickColor = 'rgb(214, 242, 182)'
 const amberGlow = 'rgba(255, 152, 20, 1)'
-
-type ModeId = 'stop' | 'slow' | 'normal' | 'racing'
-
-const MODES: { id: ModeId; label: string }[] = [
-  { id: 'stop', label: 'Stop' },
-  { id: 'slow', label: 'Slow' },
-  { id: 'normal', label: 'Normal' },
-  { id: 'racing', label: 'Racing' },
-]
 
 const container = css`
   display: flex;
@@ -40,6 +33,12 @@ const hudSurface = css`
   filter: drop-shadow(0 0 1px ${amberGlow})
     drop-shadow(0 0 3px rgba(255, 152, 20, 0.75))
     drop-shadow(0 0 6px rgba(255, 140, 10, 0.35));
+`
+
+const hudColumn = css`
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
 `
 
 const svg = css`
@@ -94,7 +93,6 @@ const kanjiLabel = css`
   word-spacing: 0.1rem;
   letter-spacing: -0.25rem;
   line-height: 1.15;
-  text-shadow: none;
 `
 
 const kanjiLabelSmall = css`
@@ -116,7 +114,6 @@ const englishHeader = css`
   margin-top: 2.15rem;
   align-self: flex-start;
   z-index: 3;
-  text-shadow: none;
   transform: scaleX(0.7);
 `
 
@@ -135,82 +132,8 @@ const timerContainer = css`
 
 const modeRail = css`
   width: 62%;
-  margin-top: 1rem;
-  margin-left: 5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-`
-
-const modeTicksRow = css`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 0.35rem;
-  height: 8px;
-`
-
-const modeGapTickPair = css`
-  display: flex;
-  gap: 3px;
-  align-items: center;
-`
-
-const modeGapTick = css`
-  width: 1.5px;
-  height: 7px;
-  background-color: ${orangeYellow};
-`
-
-const modeStrip = css`
-  display: flex;
-  align-items: stretch;
-  justify-content: space-between;
-  gap: 0.7rem;
-  padding: 0.4rem 0.55rem;
-`
-
-const modeItem = css`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  height: 80px;
-  flex: 1;
-  max-width: 120px;
-  background-color: black;
-  border: 1.5px solid ${orangeYellow};
-  border-radius: 0;
-  color: ${orangeYellow};
-  box-sizing: border-box;
-  overflow: hidden;
-`
-
-const modeItemText = css`
-  ${hudTextBlur};
-  font-family: Helvetica, Arial, sans-serif;
-  text-transform: uppercase;
-  font-size: 26px;
-  transform: scaleY(1.4);
-  transform-origin: center top;
-  line-height: 1;
-  letter-spacing: -0.04rem;
-  font-weight: 700;
-`
-
-const activeIndicator = css`
   margin-top: 0.75rem;
-  margin-bottom: 0.5rem;
-  height: 40%;
-  width: 100%;
-  background-color: #e00000;
-  filter: drop-shadow(0 0 4px #e00000)
-    drop-shadow(0 0 6px rgba(224, 0, 0, 0.75));
-`
-
-const inactiveIndicator = css`
-  ${activeIndicator};
-  background-color: transparent;
+  margin-left: 5rem;
 `
 
 const labelColumn = css`
@@ -252,71 +175,49 @@ export const Readout5 = ({
   pausedColor = orangeYellow,
 }: Readout5Props) => (
   <div css={container}>
-    <div css={hudSurface}>
-      <div css={content}>
-        <div css={svg}>
-          <TimerMask />
-        </div>
-        <div css={header}>
-          <div css={kanjiLabelContainer}>
-            <span css={kanjiLabel}>活動限界まで</span>
-            <div css={kanjiLabelSmall}>あと</div>
+    <div css={hudColumn}>
+      <div css={hudSurface}>
+        <div css={content}>
+          <div css={svg}>
+            <TimerMask />
           </div>
-          <span css={englishHeader}>Active Time Remaining:</span>
-        </div>
-        <div css={timerContainer}>
-          <Timer
-            milliseconds={298560}
-            isPaused={isPaused}
-            runningColor={orangeYellow}
-            pausedColor={pausedColor}
-            completedColor={'rgb(209, 7, 10)'}
-          />
-          <div css={labelColumn}>
-            <Spacer />
-            <TimerLabel
-              japaneseText="内部"
-              englishText="Internal"
-              showIndicator
+          <div css={header}>
+            <div css={kanjiLabelContainer}>
+              <span css={kanjiLabel}>活動限界まで</span>
+              <div css={kanjiLabelSmall}>あと</div>
+            </div>
+            <span css={englishHeader}>Active Time Remaining:</span>
+          </div>
+          <div css={timerContainer}>
+            <Timer
+              milliseconds={298560}
+              isPaused={isPaused}
+              runningColor={orangeYellow}
+              pausedColor={pausedColor}
+              completedColor={'rgb(209, 7, 10)'}
             />
-            <Spacer />
-            <TimerLabel
-              japaneseText="主電源供給システム"
-              englishText="Main Energy Supply System"
-              small
-            />
-            <Spacer />
+            <div css={labelColumn}>
+              <Spacer />
+              <TimerLabel
+                japaneseText="内部"
+                englishText="Internal"
+                showIndicator
+              />
+              <Spacer />
+              <TimerLabel
+                japaneseText="主電源供給システム"
+                englishText="Main Energy Supply System"
+                small
+              />
+              <Spacer />
+            </div>
           </div>
         </div>
       </div>
       <div css={modeRail}>
-        <ModeTicksRow />
-        <div css={modeStrip}>
-          {MODES.map(({ id, label }) => (
-            <div key={id} css={modeItem}>
-              <div css={modeItemText}>{label}</div>
-              <div
-                css={id === activeMode ? activeIndicator : inactiveIndicator}
-              />
-            </div>
-          ))}
-        </div>
-        <ModeTicksRow />
+        <ModeRow activeMode={activeMode} />
       </div>
     </div>
-  </div>
-)
-
-const MODE_TICK_SLOTS = 5
-
-const ModeTicksRow = () => (
-  <div css={modeTicksRow} aria-hidden>
-    {Array.from({ length: MODE_TICK_SLOTS }, (_, i) => (
-      <div key={i} css={modeGapTickPair}>
-        <div css={modeGapTick} />
-        <div css={modeGapTick} />
-      </div>
-    ))}
   </div>
 )
 
