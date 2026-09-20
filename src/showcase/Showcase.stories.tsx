@@ -21,8 +21,8 @@ import {
 import { Readout4 } from '../components/readout-4/Readout4'
 import { DataLabel as Readout4DataLabel } from '../components/readout-4/molecules/data-label/DataLabel'
 import { BarSegment } from '../components/readout-4/molecules/segment/BarSegment'
-import { Timer, TimerProps } from '../components/timer/Timer'
-import { Default as TimerDefault } from '../components/timer/Timer.stories'
+import { Timer, TimerProps } from '../components/readout-5/molecules/timer/Timer'
+import { Default as TimerDefault } from '../components/readout-5/molecules/timer/Timer.stories'
 
 const meta: Meta = {
   title: 'Showcase',

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { SevenSegmentDisplay } from './SevenSegmentDisplay'
 
 const meta: Meta<typeof SevenSegmentDisplay> = {
-  title: 'Components/SevenSegmentDisplay',
+  title: 'Components/Readout5/SevenSegmentDisplay',
   component: SevenSegmentDisplay,
   argTypes: {
     number: {

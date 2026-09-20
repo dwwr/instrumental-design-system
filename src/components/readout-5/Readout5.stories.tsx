@@ -153,16 +153,16 @@ const PerspectiveStage = ({
 export const Perspective: StoryObj<PerspectiveArgs> = {
   args: {
     activeMode: 'racing',
-    isPaused: true,
+    isPaused: false,
     isCompleted: false,
     pausedColor: 'rgb(255, 152, 20)',
     completedColor: 'rgb(209, 7, 10)',
-    perspective: 900,
-    rotateX: 0,
-    rotateY: 0,
-    rotateZ: 0,
-    scale: 1,
-    duration: 700,
+    perspective: 480,
+    rotateX: -36,
+    rotateY: -23,
+    rotateZ: -32,
+    scale: 0.81,
+    duration: 1400,
   },
   argTypes: {
     perspective: { control: { type: 'range', min: 400, max: 2000, step: 20 } },
