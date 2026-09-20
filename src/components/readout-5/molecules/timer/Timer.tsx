@@ -4,6 +4,7 @@ import { css } from '@emotion/react'
 import { SevenSegmentDisplay } from '../SevenSegmentDisplay/SevenSegmentDisplay'
 import { useCountdown } from './useCountdown'
 import { formatMilliseconds } from './utils'
+import { HUD_TEXT_BLUR } from '../../styles'
 
 const colon = (color: string) => css`
   display: flex;
@@ -23,7 +24,7 @@ const colon = (color: string) => css`
     background-color: ${color};
     border-radius: 1px;
     z-index: 1;
-    filter: drop-shadow(0 0 3px ${color});
+    filter: blur(${HUD_TEXT_BLUR}) drop-shadow(0 0 3px ${color});
   }
 `
 
@@ -59,11 +60,15 @@ export const Timer: React.FC<TimerProps> = ({
   isPaused,
   runningColor,
   pausedColor,
-  completedColor
+  completedColor,
 }) => {
   const { time, isCompleted } = useCountdown(milliseconds, isPaused)
 
-  const color = isPaused ? pausedColor : isCompleted ? completedColor : runningColor
+  const color = isPaused
+    ? pausedColor
+    : isCompleted
+    ? completedColor
+    : runningColor
 
   const formatted = formatMilliseconds(time)
 
@@ -73,7 +78,7 @@ export const Timer: React.FC<TimerProps> = ({
         display: 'flex',
         width: '100%',
         height: '100%',
-        alignItems: 'center'
+        alignItems: 'center',
       }}
     >
       <div css={numberContainer}>

@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react  */
 
 import { css } from '@emotion/react'
+import { hudTextBlur } from '../styles'
 
 interface TimerLabelProps {
   japaneseText: string
@@ -9,7 +10,7 @@ interface TimerLabelProps {
   small?: boolean
 }
 
-const orangeYellow = 'rgb(246, 183, 48)'
+const orangeYellow = 'rgb(255, 152, 20)'
 
 const container = css`
   display: flex;
@@ -36,6 +37,7 @@ const content = css`
 `
 
 const textBaseStyle = css`
+  ${hudTextBlur};
   color: ${orangeYellow};
   font-family: Helvetica, Arial, sans-serif;
   text-transform: uppercase;
@@ -96,6 +98,8 @@ const indicator = css`
   );
   width: 20%;
   align-self: stretch;
+  filter: drop-shadow(0 0 4px #e00000)
+    drop-shadow(0 0 6px rgba(224, 0, 0, 0.75));
 `
 
 export const TimerLabel = ({

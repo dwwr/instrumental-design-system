@@ -1,11 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import { HUD_TEXT_BLUR } from '../../styles'
 
 const digit = css`
   position: relative;
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 0 3px currentColor);
+  filter: blur(${HUD_TEXT_BLUR}) drop-shadow(0 0 3px currentColor);
 `
 
 const segment = css`
@@ -78,7 +79,7 @@ const numbers: Record<number, string> = {
   6: 'afgedc',
   7: 'abc',
   8: 'abcdefg',
-  9: 'abfgcd'
+  9: 'abfgcd',
 }
 
 export interface SevenSegmentDisplayProps {
@@ -86,22 +87,48 @@ export interface SevenSegmentDisplayProps {
   color: string
 }
 
-export const SevenSegmentDisplay: React.FC<SevenSegmentDisplayProps> = ({ number, color }) => {
+export const SevenSegmentDisplay: React.FC<SevenSegmentDisplayProps> = ({
+  number,
+  color,
+}) => {
   const segments = numbers[number] || ''
 
-  const getSegmentStyles = (segmentId: string, ...styles: ReturnType<typeof css>[]) => ({
+  const getSegmentStyles = (
+    segmentId: string,
+    ...styles: ReturnType<typeof css>[]
+  ) => ({
     css: [segment, ...styles],
-    style: { backgroundColor: segments.includes(segmentId) ? color : undefined },
+    style: {
+      backgroundColor: segments.includes(segmentId) ? color : undefined,
+    },
   })
 
   return (
     <div css={digit} style={{ color }}>
       <div {...getSegmentStyles('a', a)} />
-      <div {...getSegmentStyles('b', verticalSegment, rightSegments, topSegments)} />
-      <div {...getSegmentStyles('c', verticalSegment, rightSegments, bottomSegments)} />
+      <div
+        {...getSegmentStyles('b', verticalSegment, rightSegments, topSegments)}
+      />
+      <div
+        {...getSegmentStyles(
+          'c',
+          verticalSegment,
+          rightSegments,
+          bottomSegments
+        )}
+      />
       <div {...getSegmentStyles('d', d)} />
-      <div {...getSegmentStyles('e', verticalSegment, leftSegments, bottomSegments)} />
-      <div {...getSegmentStyles('f', verticalSegment, leftSegments, topSegments)} />
+      <div
+        {...getSegmentStyles(
+          'e',
+          verticalSegment,
+          leftSegments,
+          bottomSegments
+        )}
+      />
+      <div
+        {...getSegmentStyles('f', verticalSegment, leftSegments, topSegments)}
+      />
       <div {...getSegmentStyles('g', g)} />
     </div>
   )

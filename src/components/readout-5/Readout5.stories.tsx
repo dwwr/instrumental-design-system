@@ -32,7 +32,7 @@ export const Default: Story = {
   args: {
     activeMode: 'racing',
     isPaused: true,
-    pausedColor: 'rgb(246, 183, 48)',
+    pausedColor: 'rgb(255, 152, 20)',
   },
 }
 
