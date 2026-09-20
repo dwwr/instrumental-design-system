@@ -48,14 +48,20 @@ const svg = css`
   height: 100%;
   width: 100%;
   pointer-events: none;
+  overflow: visible;
+
+  svg {
+    overflow: visible;
+  }
 `
 
 const content = css`
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 500px;
+  height: 455px;
   width: 900px;
+  overflow: visible;
 `
 
 const header = css`
@@ -122,15 +128,15 @@ const timerContainer = css`
   margin-top: -2.75rem;
   margin-left: 4.5rem;
   margin-right: 0.5rem;
-  padding-bottom: 1.5rem;
+  padding-bottom: 1rem;
   z-index: 100;
   min-height: 0;
 `
 
 const modeRail = css`
   width: 62%;
-  margin-top: 0.55rem;
-  margin-left: 3.25rem;
+  margin-top: 1rem;
+  margin-left: 5rem;
   display: flex;
   flex-direction: column;
   gap: 3px;

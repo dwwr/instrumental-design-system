@@ -47,11 +47,15 @@ export const Timer: React.FC<TimerProps> = ({
   isPaused,
   runningColor,
   pausedColor,
-  completedColor
+  completedColor,
 }) => {
   const { time, isCompleted } = useCountdown(milliseconds, isPaused)
 
-  const color = isPaused ? pausedColor : isCompleted ? completedColor : runningColor
+  const color = isPaused
+    ? pausedColor
+    : isCompleted
+    ? completedColor
+    : runningColor
 
   const formatted = formatMilliseconds(time)
 
@@ -61,7 +65,7 @@ export const Timer: React.FC<TimerProps> = ({
         display: 'flex',
         width: '100%',
         height: '100%',
-        alignItems: 'center'
+        alignItems: 'center',
       }}
     >
       <div css={numberContainer}>

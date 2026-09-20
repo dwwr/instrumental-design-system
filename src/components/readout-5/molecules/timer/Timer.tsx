@@ -38,12 +38,12 @@ const numberContainer = css`
 `
 
 const smallerNumberContainer = css`
-  height: 62%;
+  height: 75%;
   width: 34%;
   display: flex;
   align-self: flex-end;
   gap: 0.35%;
-  padding-bottom: 3%;
+  /* padding-bottom: 3%; */
   box-sizing: border-box;
 `
 
