@@ -93,6 +93,7 @@ const kanjiLabel = css`
   word-spacing: 0.1rem;
   letter-spacing: -0.25rem;
   line-height: 1.15;
+  transform: scaleY(1.2);
 `
 
 const kanjiLabelSmall = css`
