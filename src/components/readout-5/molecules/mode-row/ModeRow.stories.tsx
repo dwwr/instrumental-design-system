@@ -49,8 +49,7 @@ export const Default: Story = {
           minHeight: '100vh',
           boxSizing: 'border-box',
           padding: '1.5rem',
-          background:
-            'linear-gradient(90deg, rgba(163,26,10,1) 0%, rgba(105,217,28,1) 50%, rgba(52,155,135,1) 100%)',
+          background: '#000',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

@@ -27,6 +27,7 @@ import {
   ModeRow,
   type ModeId,
 } from '../components/readout-5/molecules/mode-row/ModeRow'
+import { TimerLabelColumn } from '../components/readout-5/molecules/timer-label-column/TimerLabelColumn'
 
 const meta: Meta = {
   title: 'Showcase',
@@ -666,6 +667,38 @@ const ModeRowDemo = () => {
   )
 }
 
+const TimerLabelColumnDemo = () => (
+  <div
+    style={{
+      width: '100%',
+      maxWidth: '100%',
+      minWidth: 0,
+      boxSizing: 'border-box',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: '0.75rem',
+    }}
+  >
+    <div style={{ ...showcaseLabelStyle, alignSelf: 'stretch' }}>
+      Timer Label Column
+    </div>
+    <div
+      style={{
+        width: '100%',
+        maxWidth: 280,
+        padding: '2rem 1.5rem',
+        boxSizing: 'border-box',
+        background: '#000',
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+    >
+      <TimerLabelColumn allOn />
+    </div>
+  </div>
+)
+
 export const Canvas: Story = {
   render: () => (
     <div
@@ -695,6 +728,7 @@ export const Canvas: Story = {
       <Readout4MoleculesDemo />
       <Readout5Demo />
       <ModeRowDemo />
+      <TimerLabelColumnDemo />
     </div>
   ),
 }

@@ -7,6 +7,8 @@ import { TimerLabel } from '../TimerLabel'
 export interface TimerLabelColumnProps {
   isPaused?: boolean
   isCompleted?: boolean
+  /** Preview: Internal + External both active (story / showcase). */
+  allOn?: boolean
 }
 
 const column = css`
@@ -45,12 +47,13 @@ const Spacer = () => (
 export const TimerLabelColumn = ({
   isPaused = false,
   isCompleted = false,
+  allOn = false,
 }: TimerLabelColumnProps) => {
-  const completed = isCompleted
-  const paused = isPaused && !completed
+  const completed = !allOn && isCompleted
+  const paused = !allOn && isPaused && !completed
 
-  const internalOn = !paused
-  const externalOn = paused
+  const internalOn = allOn || !paused
+  const externalOn = allOn || paused
 
   return (
     <div css={column}>

@@ -1,73 +1,37 @@
-/** @jsxImportSource @emotion/react */
+/** @jsxImportSource react */
 import type { Meta, StoryObj } from '@storybook/react'
-import { css } from '@emotion/react'
-import { HUD_TICK, hudTickBlur } from '../../styles'
-import { TimerLabel } from '../TimerLabel'
+import { TimerLabelColumn } from './TimerLabelColumn'
 
-const meta: Meta = {
+const meta: Meta<typeof TimerLabelColumn> = {
   title: 'Components/Readout5/TimerLabelColumn',
+  component: TimerLabelColumn,
   parameters: {
-    layout: 'centered',
+    layout: 'fullscreen',
   },
 }
 
 export default meta
-type Story = StoryObj
+type Story = StoryObj<typeof meta>
 
-const column = css`
-  display: flex;
-  flex-direction: column;
-  width: 200px;
-  gap: 0.4rem;
-`
-
-const spacer = css`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
-`
-
-const point = css`
-  height: 7px;
-  width: 2px;
-  background-color: ${HUD_TICK};
-  ${hudTickBlur};
-`
-
-const Spacer = () => (
-  <span css={spacer}>
-    <div css={point} />
-    <div css={point} />
-  </span>
-)
-
+/** All three labels fully on for visual reference. */
 export const Default: Story = {
-  render: () => (
+  args: {
+    allOn: true,
+  },
+  render: (args) => (
     <div
       style={{
-        minWidth: 280,
+        width: '100vw',
+        minHeight: '100vh',
+        boxSizing: 'border-box',
         padding: '3rem 2.5rem',
-        borderRadius: 4,
-        background:
-          'linear-gradient(90deg, rgba(163,26,10,1) 0%, rgba(105,217,28,1) 50%, rgba(52,155,135,1) 100%)',
-        boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.25)',
+        background: '#000',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
-      <div css={column}>
-        <Spacer />
-        <TimerLabel japaneseText="内部" englishText="Internal" active />
-        <Spacer />
-        <TimerLabel
-          japaneseText="主電源供給システム"
-          englishText="Main Energy Supply System"
-          small
-        />
-        <Spacer />
-        <TimerLabel japaneseText="外部" englishText="External" active />
-        <Spacer />
-      </div>
+      <TimerLabelColumn {...args} />
     </div>
   ),
 }
