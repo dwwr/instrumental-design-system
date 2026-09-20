@@ -24,6 +24,7 @@ export const MODE_GAP = '0.9rem'
 export interface ModeRowProps {
   modes?: ModeOption[]
   activeMode?: ModeId
+  onModeClick?: (id: ModeId) => void
 }
 
 const row = css`
@@ -82,6 +83,7 @@ const YellowTicks = () => (
 export const ModeRow = ({
   modes = DEFAULT_MODES,
   activeMode = 'racing',
+  onModeClick,
 }: ModeRowProps) => (
   <div css={row}>
     <div css={edgeSlot}>
@@ -90,7 +92,11 @@ export const ModeRow = ({
     {modes.map(({ id, label }, i) => (
       <Fragment key={id}>
         <div css={modeSlot}>
-          <ModeItem label={label} active={id === activeMode} />
+          <ModeItem
+            label={label}
+            active={id === activeMode}
+            onClick={onModeClick ? () => onModeClick(id) : undefined}
+          />
         </div>
         {i < modes.length - 1 ? (
           <div css={gapSlot}>

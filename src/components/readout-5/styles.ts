@@ -22,3 +22,19 @@ export const hudTextFilter = (...extra: string[]) => css`
 export const hudTickBlur = css`
   filter: blur(${HUD_TEXT_BLUR});
 `
+
+/** Hard on/off flash shared by Internal hazard stripe and active mode bar. */
+export const hudActiveFlash = css`
+  @keyframes readout5-indicator-flash {
+    0%,
+    49% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0.12;
+    }
+  }
+
+  animation: readout5-indicator-flash 0.1s steps(1, end) infinite;
+`

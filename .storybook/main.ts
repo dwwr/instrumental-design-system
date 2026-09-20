@@ -6,7 +6,11 @@ function isReactRefreshPlugin(plugin: unknown): boolean {
   if (!plugin) return false
   if (Array.isArray(plugin)) {
     return plugin.some(
-      p => p && typeof p === 'object' && 'name' in p && String(p.name).includes('vite:react'),
+      p =>
+        p &&
+        typeof p === 'object' &&
+        'name' in p &&
+        String(p.name).includes('vite:react')
     )
   }
   return (
@@ -17,7 +21,6 @@ function isReactRefreshPlugin(plugin: unknown): boolean {
 }
 
 const config: StorybookConfig = {
-  // Showcase first so the index default (root URL) resolves to it.
   stories: [
     '../src/showcase/Showcase.stories.tsx',
     '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
@@ -30,7 +33,8 @@ const config: StorybookConfig = {
   framework: '@storybook/react-vite',
   async viteFinal(config) {
     config.plugins = [
-      ...(config.plugins?.filter(plugin => !isReactRefreshPlugin(plugin)) ?? []),
+      ...(config.plugins?.filter(plugin => !isReactRefreshPlugin(plugin)) ??
+        []),
       react({
         jsxImportSource: '@emotion/react',
         babel: {

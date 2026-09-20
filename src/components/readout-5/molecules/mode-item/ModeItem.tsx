@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { css } from '@emotion/react'
-import { HUD_AMBER, HUD_TEXT_BLUR, hudTextBlur, hudTickBlur } from '../../styles'
+import { HUD_AMBER, HUD_TEXT_BLUR, hudActiveFlash, hudTextBlur, hudTickBlur } from '../../styles'
 
 export const MODE_ITEM_WIDTH = 120
 export const MODE_TICK_GAP = '0.45rem'
@@ -10,6 +10,7 @@ export interface ModeItemProps {
   label: string
   active?: boolean
   width?: number
+  onClick?: () => void
 }
 
 const root = css`
@@ -17,9 +18,10 @@ const root = css`
   flex-direction: column;
   align-items: stretch;
   flex: 0 0 auto;
+  user-select: none;
 `
 
-const card = (width: number) => css`
+const card = (width: number, clickable: boolean) => css`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -35,6 +37,11 @@ const card = (width: number) => css`
   filter: drop-shadow(0 0 1px rgba(255, 152, 20, 1))
     drop-shadow(0 0 3px rgba(255, 152, 20, 0.75))
     drop-shadow(0 0 6px rgba(255, 140, 10, 0.35));
+  ${clickable
+    ? css`
+        cursor: pointer;
+      `
+    : ''}
 `
 
 const labelStyle = css`
@@ -48,9 +55,11 @@ const labelStyle = css`
   line-height: 1;
   letter-spacing: -0.04rem;
   font-weight: 700;
+  user-select: none;
 `
 
 const activeIndicator = css`
+  ${hudActiveFlash};
   margin-top: 0.75rem;
   margin-bottom: 0.5rem;
   height: 40%;
@@ -64,6 +73,7 @@ const inactiveIndicator = css`
   ${activeIndicator};
   background-color: transparent;
   filter: none;
+  animation: none;
 `
 
 const bottomTicks = (width: number) => css`
@@ -86,9 +96,25 @@ export const ModeItem = ({
   label,
   active = false,
   width = MODE_ITEM_WIDTH,
+  onClick,
 }: ModeItemProps) => (
   <div css={root}>
-    <div css={card(width)}>
+    <div
+      css={card(width, Boolean(onClick))}
+      onClick={onClick}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={
+        onClick
+          ? (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                onClick()
+              }
+            }
+          : undefined
+      }
+    >
       <div css={labelStyle}>{label}</div>
       <div css={active ? activeIndicator : inactiveIndicator} />
     </div>

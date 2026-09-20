@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react  */
 
 import { css } from '@emotion/react'
-import { hudTextBlur, HUD_TEXT_BLUR } from '../styles'
+import { hudTextBlur, HUD_TEXT_BLUR, hudActiveFlash } from '../styles'
 
 interface TimerLabelProps {
   japaneseText: string
@@ -89,6 +89,7 @@ const squishedText = css`
 `
 
 const indicator = css`
+  ${hudActiveFlash};
   background-image: repeating-linear-gradient(
     135deg,
     red,
