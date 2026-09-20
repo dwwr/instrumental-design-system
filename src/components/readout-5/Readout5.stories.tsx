@@ -133,13 +133,13 @@ const PerspectiveStage = ({
         height: '100vh',
         overflow: 'hidden',
         display: 'flex',
-        alignItems: 'center',
         justifyContent: 'center',
         background: '#000',
         padding: '1rem',
         boxSizing: 'border-box',
         perspective: '900px',
         perspectiveOrigin: '50% 50%',
+        paddingTop: '4rem',
       }}
     >
       <div
