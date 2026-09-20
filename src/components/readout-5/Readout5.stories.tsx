@@ -27,17 +27,17 @@ const meta: Meta<typeof Readout5> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {
+export const Running: Story = {
   args: {
     activeMode: 'racing',
-    isPaused: true,
+    isPaused: false,
     isCompleted: false,
     pausedColor: 'rgb(255, 152, 20)',
     completedColor: 'rgb(209, 7, 10)',
   },
 }
 
-export const PausedGreen: Story = {
+export const Paused: Story = {
   args: {
     activeMode: 'racing',
     isPaused: true,

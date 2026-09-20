@@ -3,17 +3,19 @@
 import { css } from '@emotion/react'
 import { hudTextBlur, HUD_TEXT_BLUR, hudActiveFlash } from '../styles'
 
-interface TimerLabelProps {
+export interface TimerLabelProps {
   japaneseText: string
   englishText: string
   active?: boolean
   flashing?: boolean
+  faint?: boolean
   small?: boolean
 }
 
 const orangeYellow = 'rgb(255, 152, 20)'
 
 const container = css`
+  position: relative;
   display: flex;
   justify-content: space-between;
   border: 1px solid ${orangeYellow};
@@ -23,9 +25,16 @@ const container = css`
   box-sizing: border-box;
   white-space: nowrap;
   overflow: hidden;
+  background-color: #000;
+`
+
+const containerFaint = css`
+  ${container};
+  opacity: 0.1;
 `
 
 const content = css`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -35,6 +44,11 @@ const content = css`
   width: 80%;
   min-width: 0;
   padding: 1px 0 2px;
+`
+
+const contentFull = css`
+  ${content};
+  width: 100%;
 `
 
 const textBaseStyle = css`
@@ -90,6 +104,8 @@ const squishedText = css`
 `
 
 const indicator = css`
+  position: relative;
+  z-index: 1;
   background-image: repeating-linear-gradient(
     135deg,
     red,
@@ -111,16 +127,17 @@ const indicatorFlashing = css`
 export const TimerLabel = ({
   japaneseText,
   englishText,
-  active,
+  active = false,
   flashing = false,
+  faint = false,
   small,
 }: TimerLabelProps) => {
   const kanjiStyle = small ? [kanjiSmall, squishedKanji] : kanjiLarge
   const englishStyle = small ? squishedText : english
 
   return (
-    <div css={container}>
-      <div css={content}>
+    <div css={faint ? containerFaint : container}>
+      <div css={active ? content : contentFull}>
         <div css={kanjiStyle}>{japaneseText}</div>
         <div css={englishStyle}>{englishText}</div>
       </div>

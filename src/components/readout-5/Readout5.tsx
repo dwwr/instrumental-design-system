@@ -3,13 +3,17 @@
 import { css } from '@emotion/react'
 import { Timer } from './molecules/timer/Timer'
 import TimerMask from './timer-mask.svg?react'
-import { TimerLabel } from './molecules/TimerLabel'
+import { TimerLabelColumn } from './molecules/timer-label-column/TimerLabelColumn'
 import { ModeRow } from './molecules/mode-row/ModeRow'
 import type { ModeId } from './molecules/mode-row/ModeRow'
-import { HUD_AMBER, HUD_COMPLETED, HUD_TICK, hudActiveFlash, hudTextBlur, hudTickBlur } from './styles'
+import {
+  HUD_AMBER,
+  HUD_COMPLETED,
+  hudActiveFlash,
+  hudTextBlur,
+} from './styles'
 
 const orangeYellow = HUD_AMBER
-const tickColor = HUD_TICK
 const amberGlow = 'rgba(255, 152, 20, 1)'
 const completedGlow = 'rgba(209, 7, 10, 1)'
 
@@ -146,38 +150,16 @@ const timerContainer = css`
   min-height: 0;
 `
 
+const labelColumnSlot = css`
+  margin-top: -3.25rem;
+  margin-right: 1.1rem;
+  align-self: flex-start;
+`
+
 const modeRail = css`
   width: 62%;
   margin-top: 0.75rem;
   margin-left: 5rem;
-`
-
-const labelColumn = css`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-self: flex-start;
-  height: auto;
-  width: 200px;
-  flex-shrink: 0;
-  margin-top: -3.25rem;
-  margin-right: 1.1rem;
-  gap: 0.4rem;
-`
-
-const spacer = css`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
-`
-
-const point = css`
-  height: 7px;
-  width: 2px;
-  background-color: ${tickColor};
-  ${hudTickBlur};
 `
 
 export interface Readout5Props {
@@ -199,59 +181,44 @@ export const Readout5 = ({
   const headerColor = isCompleted ? completedColor : orangeYellow
 
   return (
-  <div css={container}>
-    <div css={hudColumn}>
-      <div css={isCompleted ? hudSurfaceCompleted : hudSurface}>
-        <div css={content}>
-          <div css={svg}>
-            <TimerMask />
-          </div>
-          <div css={isCompleted ? headerFlashing : header}>
-            <div css={kanjiLabelContainer}>
-              <span css={kanjiLabel(headerColor)}>活動限界まで</span>
-              <div css={kanjiLabelSmall(headerColor)}>あと</div>
+    <div css={container}>
+      <div css={hudColumn}>
+        <div css={isCompleted ? hudSurfaceCompleted : hudSurface}>
+          <div css={content}>
+            <div css={svg}>
+              <TimerMask />
             </div>
-            <span css={englishHeader(headerColor)}>Active Time Remaining:</span>
-          </div>
-          <div css={timerContainer}>
-            <Timer
-              milliseconds={298560}
-              isPaused={isPaused}
-              isCompleted={isCompleted}
-              runningColor={orangeYellow}
-              pausedColor={pausedColor}
-              completedColor={completedColor}
-            />
-            <div css={labelColumn}>
-              <Spacer />
-              <TimerLabel
-                japaneseText="内部"
-                englishText="Internal"
-                active
-                flashing={isCompleted}
+            <div css={isCompleted ? headerFlashing : header}>
+              <div css={kanjiLabelContainer}>
+                <span css={kanjiLabel(headerColor)}>活動限界まで</span>
+                <div css={kanjiLabelSmall(headerColor)}>あと</div>
+              </div>
+              <span css={englishHeader(headerColor)}>
+                Active Time Remaining:
+              </span>
+            </div>
+            <div css={timerContainer}>
+              <Timer
+                milliseconds={298560}
+                isPaused={isPaused}
+                isCompleted={isCompleted}
+                runningColor={orangeYellow}
+                pausedColor={pausedColor}
+                completedColor={completedColor}
               />
-              <Spacer />
-              <TimerLabel
-                japaneseText="主電源供給システム"
-                englishText="Main Energy Supply System"
-                small
-              />
-              <Spacer />
+              <div css={labelColumnSlot}>
+                <TimerLabelColumn
+                  isPaused={isPaused}
+                  isCompleted={isCompleted}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div css={modeRail}>
-        <ModeRow activeMode={resolvedMode} />
+        <div css={modeRail}>
+          <ModeRow activeMode={resolvedMode} />
+        </div>
       </div>
     </div>
-  </div>
   )
 }
-
-const Spacer = () => (
-  <span css={spacer}>
-    <div css={point} />
-    <div css={point} />
-  </span>
-)
