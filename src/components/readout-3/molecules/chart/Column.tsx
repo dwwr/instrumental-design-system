@@ -48,7 +48,6 @@ export const Column: React.FC<ColumnProps> = ({
   useLayoutEffect(() => {
     const el = fillRef.current
     if (!el) return
-    // Standalone / story usage: sync from props. Chart paint owns live mode.
     if (!el.closest('[data-chart-paint]')) {
       el.style.height = `${Math.abs(value - 100)}%`
     }

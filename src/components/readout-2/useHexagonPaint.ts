@@ -13,7 +13,12 @@ interface UseHexagonPaintOptions {
   range?: number
 }
 
-const paintHex = (el: HTMLElement, on: boolean, lastOn: Uint8Array, index: number) => {
+const paintHex = (
+  el: HTMLElement,
+  on: boolean,
+  lastOn: Uint8Array,
+  index: number
+) => {
   const next = on ? 1 : 0
   if (lastOn[index] === next) return
   lastOn[index] = next
@@ -26,10 +31,6 @@ const paintAll = (hexes: HTMLElement[], on: boolean, lastOn: Uint8Array) => {
   }
 }
 
-/**
- * Drives hex on/off via DOM (data-on) without React setState.
- * stayOn / stayOff skip timers entirely.
- */
 export const useHexagonPaint = ({
   containerRef,
   numberOfHexagons,
@@ -41,7 +42,9 @@ export const useHexagonPaint = ({
     const container = containerRef.current
     if (!container) return
 
-    const hexes = Array.from(container.querySelectorAll<HTMLElement>('[data-hex]'))
+    const hexes = Array.from(
+      container.querySelectorAll<HTMLElement>('[data-hex]')
+    )
     if (hexes.length === 0) return
 
     const lastOn = new Uint8Array(hexes.length)

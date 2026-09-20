@@ -121,7 +121,6 @@ const borderLineArea = css`
 const energyLabelArea = gridArea(5, 8, 8)
 
 export interface Readout4Props {
-  /** Active segment index: that bar flickers; bars at or below it render green. */
   value?: number
 }
 

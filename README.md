@@ -55,6 +55,7 @@ Requires **Node 24** (`engines` in `package.json`).
 | **Readout2** | Hexagon emergency grid |
 | **Readout3** | Animated bar chart |
 | **Readout4** | Horizontal bar readout |
+| **Readout5** | Active time remaining panel with timer mask (WIP) |
 | **SevenSegmentDisplay** | Seven-segment numeric display |
 | **Timer** | Countdown timer |
 

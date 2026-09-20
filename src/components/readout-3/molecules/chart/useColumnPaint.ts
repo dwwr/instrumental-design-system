@@ -6,7 +6,11 @@ const RESET_MS = 2000
 const SEGMENT_COUNT = 17
 const SEGMENT_ON = 'rgb(251, 181, 19)'
 
-const deviateValue = (value: number, range: number, direction: 'increment' | 'decrement') => {
+const deviateValue = (
+  value: number,
+  range: number,
+  direction: 'increment' | 'decrement'
+) => {
   const deviation = Math.floor(Math.random() * range)
   return direction === 'increment' ? value + deviation : value - deviation
 }
@@ -21,10 +25,6 @@ interface UseColumnPaintOptions {
   loop?: boolean
 }
 
-/**
- * Drives column fill heights + segmented bars via DOM without React setState.
- * Preserves original deviateValue math and 100ms / 2000ms timings.
- */
 export const useColumnPaint = ({
   rootRef,
   numberOfColumns,
@@ -40,7 +40,10 @@ export const useColumnPaint = ({
     const root = rootRef.current
     if (!root) return
 
-    const fillsByIndex: HTMLElement[][] = Array.from({ length: numberOfColumns }, () => [])
+    const fillsByIndex: HTMLElement[][] = Array.from(
+      { length: numberOfColumns },
+      () => []
+    )
     root.querySelectorAll<HTMLElement>('.r3-column-fill').forEach(el => {
       const index = Number(el.dataset.colIndex)
       if (Number.isFinite(index) && index >= 0 && index < numberOfColumns) {
@@ -48,9 +51,9 @@ export const useColumnPaint = ({
       }
     })
 
-    const segTracks = Array.from(root.querySelectorAll<HTMLElement>('.r3-seg-track')).map(track =>
-      Array.from(track.querySelectorAll<HTMLElement>('.r3-seg'))
-    )
+    const segTracks = Array.from(
+      root.querySelectorAll<HTMLElement>('.r3-seg-track')
+    ).map(track => Array.from(track.querySelectorAll<HTMLElement>('.r3-seg')))
 
     const lastValues = new Float64Array(numberOfColumns).fill(Number.NaN)
     const lastSegLevel = new Int16Array(segTracks.length).fill(-1)
@@ -91,7 +94,10 @@ export const useColumnPaint = ({
 
     paintRef.current = paint
 
-    const seed = Array.from({ length: numberOfColumns }, () => benchmarkRef.current ?? 0)
+    const seed = Array.from(
+      { length: numberOfColumns },
+      () => benchmarkRef.current ?? 0
+    )
     paint(seed)
 
     if (!deviate && !loop) return

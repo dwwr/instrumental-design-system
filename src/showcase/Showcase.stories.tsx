@@ -21,8 +21,13 @@ import {
 import { Readout4 } from '../components/readout-4/Readout4'
 import { DataLabel as Readout4DataLabel } from '../components/readout-4/molecules/data-label/DataLabel'
 import { BarSegment } from '../components/readout-4/molecules/segment/BarSegment'
-import { Timer, TimerProps } from '../components/timer/Timer'
-import { Default as TimerDefault } from '../components/timer/Timer.stories'
+import { Readout5 } from '../components/readout-5/Readout5'
+import { Running as Readout5Running } from '../components/readout-5/Readout5.stories'
+import {
+  ModeRow,
+  type ModeId,
+} from '../components/readout-5/molecules/mode-row/ModeRow'
+import { TimerLabelColumn } from '../components/readout-5/molecules/timer-label-column/TimerLabelColumn'
 
 const meta: Meta = {
   title: 'Showcase',
@@ -571,19 +576,125 @@ const Readout4MoleculesDemo = () => {
   )
 }
 
-const TimerDemo = () => (
+const Readout5Demo = () => (
   <div
     style={{
       width: '100%',
+      maxWidth: '100%',
+      minWidth: 0,
+      boxSizing: 'border-box',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       gap: '0.75rem',
     }}
   >
-    <div style={showcaseLabelStyle}>Timer</div>
-    <div style={{ width: '300px', height: '100px' }}>
-      <Timer {...(TimerDefault.args as TimerProps)} />
+    <div style={{ ...showcaseLabelStyle, alignSelf: 'stretch' }}>
+      Active Time Remaining Readout
+    </div>
+    <div style={{ width: '100%', maxWidth: 900 }}>
+      <Readout5 {...Readout5Running.args} />
+    </div>
+  </div>
+)
+
+const MODE_ROW_DESIGN_WIDTH = 640
+const MODE_ROW_DESIGN_HEIGHT = 130
+
+const ModeRowDemo = () => {
+  const [activeMode, setActiveMode] = useState<ModeId>('stop')
+  const frameRef = useRef<HTMLDivElement>(null)
+  const [scale, setScale] = useState(1)
+
+  useEffect(() => {
+    const frame = frameRef.current
+    if (!frame) return
+
+    const update = () => {
+      setScale(Math.min(1, frame.clientWidth / MODE_ROW_DESIGN_WIDTH))
+    }
+
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(frame)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        maxWidth: '100%',
+        minWidth: 0,
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '0.75rem',
+      }}
+    >
+      <div style={{ ...showcaseLabelStyle, alignSelf: 'stretch' }}>
+        Mode Row - click to change mode
+      </div>
+      <div
+        ref={frameRef}
+        style={{
+          width: '100%',
+          maxWidth: MODE_ROW_DESIGN_WIDTH,
+          height: MODE_ROW_DESIGN_HEIGHT * scale,
+          overflow: 'hidden',
+        }}
+      >
+        <div
+          style={{
+            width: MODE_ROW_DESIGN_WIDTH,
+            height: MODE_ROW_DESIGN_HEIGHT,
+            padding: '1.25rem 1rem',
+            boxSizing: 'border-box',
+            background:
+              'linear-gradient(90deg, rgba(163,26,10,1) 0%, rgba(105,217,28,1) 50%, rgba(52,155,135,1) 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transform: `scale(${scale})`,
+            transformOrigin: 'top left',
+          }}
+        >
+          <ModeRow activeMode={activeMode} onModeClick={setActiveMode} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const TimerLabelColumnDemo = () => (
+  <div
+    style={{
+      width: '100%',
+      maxWidth: '100%',
+      minWidth: 0,
+      boxSizing: 'border-box',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: '0.75rem',
+    }}
+  >
+    <div style={{ ...showcaseLabelStyle, alignSelf: 'stretch' }}>
+      Timer Label Column
+    </div>
+    <div
+      style={{
+        width: '100%',
+        maxWidth: 280,
+        padding: '2rem 1.5rem',
+        boxSizing: 'border-box',
+        background: '#000',
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+    >
+      <TimerLabelColumn allOn />
     </div>
   </div>
 )
@@ -615,7 +726,9 @@ export const Canvas: Story = {
       <Readout2Row />
       <Readout4Demo />
       <Readout4MoleculesDemo />
-      <TimerDemo />
+      <Readout5Demo />
+      <ModeRowDemo />
+      <TimerLabelColumnDemo />
     </div>
   ),
 }
