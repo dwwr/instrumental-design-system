@@ -149,7 +149,6 @@ const PerspectiveStage = ({
   )
 }
 
-/** Eva ATR camera angle — anime.js eases control changes. Starts head-on. */
 export const Perspective: StoryObj<PerspectiveArgs> = {
   args: {
     activeMode: 'racing',
@@ -158,10 +157,10 @@ export const Perspective: StoryObj<PerspectiveArgs> = {
     pausedColor: 'rgb(255, 152, 20)',
     completedColor: 'rgb(209, 7, 10)',
     perspective: 480,
-    rotateX: -36,
-    rotateY: -23,
+    rotateX: -28,
+    rotateY: -21,
     rotateZ: -32,
-    scale: 0.81,
+    scale: 0.82,
     duration: 1400,
   },
   argTypes: {
