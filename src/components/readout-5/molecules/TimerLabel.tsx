@@ -6,7 +6,8 @@ import { hudTextBlur, HUD_TEXT_BLUR, hudActiveFlash } from '../styles'
 interface TimerLabelProps {
   japaneseText: string
   englishText: string
-  showIndicator?: boolean
+  active?: boolean
+  flashing?: boolean
   small?: boolean
 }
 
@@ -89,7 +90,6 @@ const squishedText = css`
 `
 
 const indicator = css`
-  ${hudActiveFlash};
   background-image: repeating-linear-gradient(
     135deg,
     red,
@@ -103,10 +103,16 @@ const indicator = css`
     drop-shadow(0 0 6px rgba(224, 0, 0, 0.75));
 `
 
+const indicatorFlashing = css`
+  ${indicator};
+  ${hudActiveFlash};
+`
+
 export const TimerLabel = ({
   japaneseText,
   englishText,
-  showIndicator,
+  active,
+  flashing = false,
   small,
 }: TimerLabelProps) => {
   const kanjiStyle = small ? [kanjiSmall, squishedKanji] : kanjiLarge
@@ -118,7 +124,7 @@ export const TimerLabel = ({
         <div css={kanjiStyle}>{japaneseText}</div>
         <div css={englishStyle}>{englishText}</div>
       </div>
-      {showIndicator && <div css={indicator} />}
+      {active && <div css={flashing ? indicatorFlashing : indicator} />}
     </div>
   )
 }

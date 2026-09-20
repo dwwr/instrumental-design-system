@@ -8,7 +8,7 @@ const meta: Meta<typeof Readout5> = {
   parameters: {
     layout: 'fullscreen',
   },
-  render: (args) => (
+  render: args => (
     <div
       style={{
         width: '100vw',
@@ -27,20 +27,32 @@ const meta: Meta<typeof Readout5> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-/** Amber frozen frame matching the ATR reference (Racing active). */
 export const Default: Story = {
   args: {
     activeMode: 'racing',
     isPaused: true,
+    isCompleted: false,
     pausedColor: 'rgb(255, 152, 20)',
+    completedColor: 'rgb(209, 7, 10)',
   },
 }
 
-/** Paused green state for comparison. */
 export const PausedGreen: Story = {
   args: {
     activeMode: 'racing',
     isPaused: true,
+    isCompleted: false,
     pausedColor: 'green',
+    completedColor: 'rgb(209, 7, 10)',
+  },
+}
+
+export const Completed: Story = {
+  args: {
+    activeMode: 'racing',
+    isPaused: true,
+    isCompleted: true,
+    pausedColor: 'rgb(255, 152, 20)',
+    completedColor: 'rgb(209, 7, 10)',
   },
 }

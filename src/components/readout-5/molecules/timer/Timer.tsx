@@ -43,13 +43,13 @@ const smallerNumberContainer = css`
   display: flex;
   align-self: flex-end;
   gap: 0.35%;
-  /* padding-bottom: 3%; */
   box-sizing: border-box;
 `
 
 export interface TimerProps {
   milliseconds: number
   isPaused?: boolean
+  isCompleted?: boolean
   runningColor: string
   pausedColor: string
   completedColor: string
@@ -58,19 +58,24 @@ export interface TimerProps {
 export const Timer: React.FC<TimerProps> = ({
   milliseconds,
   isPaused,
+  isCompleted: isCompletedProp,
   runningColor,
   pausedColor,
   completedColor,
 }) => {
-  const { time, isCompleted } = useCountdown(milliseconds, isPaused)
+  const { time, isCompleted: countdownCompleted } = useCountdown(
+    milliseconds,
+    isPaused,
+  )
+  const isCompleted = isCompletedProp ?? countdownCompleted
 
-  const color = isPaused
-    ? pausedColor
-    : isCompleted
+  const color = isCompleted
     ? completedColor
-    : runningColor
+    : isPaused
+      ? pausedColor
+      : runningColor
 
-  const formatted = formatMilliseconds(time)
+  const formatted = formatMilliseconds(isCompletedProp ? 0 : time)
 
   return (
     <div

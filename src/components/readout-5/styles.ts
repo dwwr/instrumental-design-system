@@ -2,6 +2,7 @@ import { css } from '@emotion/react'
 
 export const HUD_AMBER = 'rgb(255, 152, 20)'
 export const HUD_TICK = 'rgb(214, 242, 182)'
+export const HUD_COMPLETED = 'rgb(209, 7, 10)'
 export const HUD_TEXT_BLUR = '0.65px'
 
 export const hudTextShadow = css`
@@ -15,15 +16,13 @@ export const hudTextBlur = css`
 
 export const hudTextFilter = (...extra: string[]) => css`
   ${hudTextShadow};
-  filter: blur(${HUD_TEXT_BLUR})${extra.length ? ` ${extra.join(' ')}` : ''};
+  filter: blur(${HUD_TEXT_BLUR}) ${extra.length ? ` ${extra.join(' ')}` : ''};
 `
 
-/** Soft-focus used by chrome ticks (label spacers, mode bottom ticks). */
 export const hudTickBlur = css`
   filter: blur(${HUD_TEXT_BLUR});
 `
 
-/** Hard on/off flash shared by Internal hazard stripe and active mode bar. */
 export const hudActiveFlash = css`
   @keyframes readout5-indicator-flash {
     0%,

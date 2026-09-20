@@ -6,11 +6,12 @@ import TimerMask from './timer-mask.svg?react'
 import { TimerLabel } from './molecules/TimerLabel'
 import { ModeRow } from './molecules/mode-row/ModeRow'
 import type { ModeId } from './molecules/mode-row/ModeRow'
-import { HUD_AMBER, HUD_TICK, hudTextBlur, hudTickBlur } from './styles'
+import { HUD_AMBER, HUD_COMPLETED, HUD_TICK, hudActiveFlash, hudTextBlur, hudTickBlur } from './styles'
 
 const orangeYellow = HUD_AMBER
 const tickColor = HUD_TICK
 const amberGlow = 'rgba(255, 152, 20, 1)'
+const completedGlow = 'rgba(209, 7, 10, 1)'
 
 const container = css`
   display: flex;
@@ -33,6 +34,15 @@ const hudSurface = css`
   filter: drop-shadow(0 0 1px ${amberGlow})
     drop-shadow(0 0 3px rgba(255, 152, 20, 0.75))
     drop-shadow(0 0 6px rgba(255, 140, 10, 0.35));
+`
+
+const hudSurfaceCompleted = css`
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  filter: drop-shadow(0 0 1px ${completedGlow})
+    drop-shadow(0 0 3px rgba(209, 7, 10, 0.75))
+    drop-shadow(0 0 6px rgba(209, 7, 10, 0.35));
 `
 
 const hudColumn = css`
@@ -72,6 +82,11 @@ const header = css`
   min-height: 4.25rem;
 `
 
+const headerFlashing = css`
+  ${header};
+  ${hudActiveFlash};
+`
+
 const kanjiLabelContainer = css`
   display: flex;
   flex-direction: column;
@@ -83,11 +98,11 @@ const kanjiLabelContainer = css`
   margin-right: calc(-0.34 * 480px);
 `
 
-const kanjiLabel = css`
+const kanjiLabel = (color: string) => css`
   ${hudTextBlur};
   display: block;
   width: fit-content;
-  color: ${orangeYellow};
+  color: ${color};
   font-size: 66px;
   font-family: 'Eva-Matisse_Classic', sans-serif;
   word-spacing: 0.1rem;
@@ -96,15 +111,15 @@ const kanjiLabel = css`
   transform: scaleY(1.2);
 `
 
-const kanjiLabelSmall = css`
-  ${kanjiLabel};
+const kanjiLabelSmall = (color: string) => css`
+  ${kanjiLabel(color)};
   font-size: 40px;
   line-height: 1.5;
 `
 
-const englishHeader = css`
+const englishHeader = (color: string) => css`
   ${hudTextBlur};
-  color: ${orangeYellow};
+  color: ${color};
   font-family: Helvetica, Arial, sans-serif;
   text-transform: uppercase;
   font-size: 32px;
@@ -168,42 +183,52 @@ const point = css`
 export interface Readout5Props {
   activeMode?: ModeId
   isPaused?: boolean
+  isCompleted?: boolean
   pausedColor?: string
+  completedColor?: string
 }
 
 export const Readout5 = ({
   activeMode = 'racing',
   isPaused = true,
+  isCompleted = false,
   pausedColor = orangeYellow,
-}: Readout5Props) => (
+  completedColor = HUD_COMPLETED,
+}: Readout5Props) => {
+  const resolvedMode: ModeId = isCompleted ? 'stop' : activeMode
+  const headerColor = isCompleted ? completedColor : orangeYellow
+
+  return (
   <div css={container}>
     <div css={hudColumn}>
-      <div css={hudSurface}>
+      <div css={isCompleted ? hudSurfaceCompleted : hudSurface}>
         <div css={content}>
           <div css={svg}>
             <TimerMask />
           </div>
-          <div css={header}>
+          <div css={isCompleted ? headerFlashing : header}>
             <div css={kanjiLabelContainer}>
-              <span css={kanjiLabel}>活動限界まで</span>
-              <div css={kanjiLabelSmall}>あと</div>
+              <span css={kanjiLabel(headerColor)}>活動限界まで</span>
+              <div css={kanjiLabelSmall(headerColor)}>あと</div>
             </div>
-            <span css={englishHeader}>Active Time Remaining:</span>
+            <span css={englishHeader(headerColor)}>Active Time Remaining:</span>
           </div>
           <div css={timerContainer}>
             <Timer
               milliseconds={298560}
               isPaused={isPaused}
+              isCompleted={isCompleted}
               runningColor={orangeYellow}
               pausedColor={pausedColor}
-              completedColor={'rgb(209, 7, 10)'}
+              completedColor={completedColor}
             />
             <div css={labelColumn}>
               <Spacer />
               <TimerLabel
                 japaneseText="内部"
                 englishText="Internal"
-                showIndicator
+                active
+                flashing={isCompleted}
               />
               <Spacer />
               <TimerLabel
@@ -217,11 +242,12 @@ export const Readout5 = ({
         </div>
       </div>
       <div css={modeRail}>
-        <ModeRow activeMode={activeMode} />
+        <ModeRow activeMode={resolvedMode} />
       </div>
     </div>
   </div>
-)
+  )
+}
 
 const Spacer = () => (
   <span css={spacer}>
