@@ -20,9 +20,13 @@ const meta: Meta<typeof Readout5> = {
         alignItems: 'center',
         justifyContent: 'center',
         background: '#000',
+        padding: '1rem',
+        boxSizing: 'border-box',
       }}
     >
-      <Readout5 {...args} />
+      <div style={{ width: '100%', maxWidth: 900 }}>
+        <Readout5 {...args} />
+      </div>
     </div>
   ),
 }
@@ -132,6 +136,8 @@ const PerspectiveStage = ({
         alignItems: 'center',
         justifyContent: 'center',
         background: '#000',
+        padding: '1rem',
+        boxSizing: 'border-box',
         perspective: '900px',
         perspectiveOrigin: '50% 50%',
       }}
@@ -139,6 +145,8 @@ const PerspectiveStage = ({
       <div
         ref={targetRef}
         style={{
+          width: '100%',
+          maxWidth: 900,
           transform: 'rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1)',
           transformStyle: 'preserve-3d',
         }}

@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react  */
 
+import { useEffect, useRef, useState } from 'react'
 import { css } from '@emotion/react'
 import { Timer } from './molecules/timer/Timer'
 import TimerMask from './timer-mask.svg?react'
@@ -13,9 +14,31 @@ import {
   hudTextBlur,
 } from './styles'
 
+export const READOUT5_DESIGN_WIDTH = 900
+export const READOUT5_DESIGN_HEIGHT = 580
+
 const orangeYellow = HUD_AMBER
 const amberGlow = 'rgba(255, 152, 20, 1)'
 const completedGlow = 'rgba(209, 7, 10, 1)'
+
+const scaleShell = css`
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+`
+
+const scaleClip = css`
+  overflow: hidden;
+  flex-shrink: 0;
+`
+
+const scaleCanvas = css`
+  width: ${READOUT5_DESIGN_WIDTH}px;
+  height: ${READOUT5_DESIGN_HEIGHT}px;
+  transform-origin: top left;
+`
 
 const container = css`
   display: flex;
@@ -179,44 +202,72 @@ export const Readout5 = ({
 }: Readout5Props) => {
   const resolvedMode: ModeId = isCompleted ? 'stop' : activeMode
   const headerColor = isCompleted ? completedColor : orangeYellow
+  const shellRef = useRef<HTMLDivElement>(null)
+  const [scale, setScale] = useState(1)
+
+  useEffect(() => {
+    const shell = shellRef.current
+    if (!shell) return
+
+    const update = () => {
+      setScale(Math.min(1, shell.clientWidth / READOUT5_DESIGN_WIDTH))
+    }
+
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(shell)
+    return () => observer.disconnect()
+  }, [])
 
   return (
-    <div css={container}>
-      <div css={hudColumn}>
-        <div css={isCompleted ? hudSurfaceCompleted : hudSurface}>
-          <div css={content}>
-            <div css={svg}>
-              <TimerMask />
-            </div>
-            <div css={isCompleted ? headerFlashing : header}>
-              <div css={kanjiLabelContainer}>
-                <span css={kanjiLabel(headerColor)}>活動限界まで</span>
-                <div css={kanjiLabelSmall(headerColor)}>あと</div>
+    <div ref={shellRef} css={scaleShell}>
+      <div
+        css={scaleClip}
+        style={{
+          width: READOUT5_DESIGN_WIDTH * scale,
+          height: READOUT5_DESIGN_HEIGHT * scale,
+        }}
+      >
+        <div css={scaleCanvas} style={{ transform: `scale(${scale})` }}>
+          <div css={container}>
+            <div css={hudColumn}>
+              <div css={isCompleted ? hudSurfaceCompleted : hudSurface}>
+                <div css={content}>
+                  <div css={svg}>
+                    <TimerMask />
+                  </div>
+                  <div css={isCompleted ? headerFlashing : header}>
+                    <div css={kanjiLabelContainer}>
+                      <span css={kanjiLabel(headerColor)}>活動限界まで</span>
+                      <div css={kanjiLabelSmall(headerColor)}>あと</div>
+                    </div>
+                    <span css={englishHeader(headerColor)}>
+                      Active Time Remaining:
+                    </span>
+                  </div>
+                  <div css={timerContainer}>
+                    <Timer
+                      milliseconds={298560}
+                      isPaused={isPaused}
+                      isCompleted={isCompleted}
+                      runningColor={orangeYellow}
+                      pausedColor={pausedColor}
+                      completedColor={completedColor}
+                    />
+                    <div css={labelColumnSlot}>
+                      <TimerLabelColumn
+                        isPaused={isPaused}
+                        isCompleted={isCompleted}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <span css={englishHeader(headerColor)}>
-                Active Time Remaining:
-              </span>
-            </div>
-            <div css={timerContainer}>
-              <Timer
-                milliseconds={298560}
-                isPaused={isPaused}
-                isCompleted={isCompleted}
-                runningColor={orangeYellow}
-                pausedColor={pausedColor}
-                completedColor={completedColor}
-              />
-              <div css={labelColumnSlot}>
-                <TimerLabelColumn
-                  isPaused={isPaused}
-                  isCompleted={isCompleted}
-                />
+              <div css={modeRail}>
+                <ModeRow activeMode={resolvedMode} />
               </div>
             </div>
           </div>
-        </div>
-        <div css={modeRail}>
-          <ModeRow activeMode={resolvedMode} />
         </div>
       </div>
     </div>
