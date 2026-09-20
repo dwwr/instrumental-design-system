@@ -10,7 +10,6 @@ import {
 } from './styles'
 
 export interface HexagonProps {
-  /** Storybook / static initial on state. Omitted from JSX so React won't clobber DOM paints. */
   isOn?: boolean
   text: string
 }

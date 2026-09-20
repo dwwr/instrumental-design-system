@@ -13,12 +13,11 @@ const meta: Meta<typeof TimerLabelColumn> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-/** All three labels fully on for visual reference. */
 export const Default: Story = {
   args: {
     allOn: true,
   },
-  render: (args) => (
+  render: args => (
     <div
       style={{
         width: '100vw',

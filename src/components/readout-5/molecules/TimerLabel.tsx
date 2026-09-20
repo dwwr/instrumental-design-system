@@ -72,6 +72,11 @@ const english = css`
   transform-origin: bottom left;
 `
 
+const englishExternal = css`
+  ${english};
+  transform: scaleX(0.85);
+`
+
 const kanjiLarge = css`
   ${kanji};
   font-size: 80px;
@@ -133,7 +138,12 @@ export const TimerLabel = ({
   small,
 }: TimerLabelProps) => {
   const kanjiStyle = small ? [kanjiSmall, squishedKanji] : kanjiLarge
-  const englishStyle = small ? squishedText : english
+  const isExternal = englishText.toLowerCase() === 'external'
+  const englishStyle = small
+    ? squishedText
+    : isExternal
+    ? englishExternal
+    : english
 
   return (
     <div css={faint ? containerFaint : container}>
