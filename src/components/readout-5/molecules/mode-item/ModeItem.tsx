@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { css } from '@emotion/react'
-import { HUD_AMBER, HUD_TEXT_BLUR, hudTextBlur } from '../../styles'
+import { HUD_AMBER, HUD_TEXT_BLUR, hudTextBlur, hudTickBlur } from '../../styles'
 
 export const MODE_ITEM_WIDTH = 120
 export const MODE_TICK_GAP = '0.45rem'
@@ -56,7 +56,7 @@ const activeIndicator = css`
   height: 40%;
   width: 100%;
   background-color: #e00000;
-  filter: drop-shadow(0 0 4px #e00000)
+  filter: blur(${HUD_TEXT_BLUR}) drop-shadow(0 0 4px #e00000)
     drop-shadow(0 0 6px rgba(224, 0, 0, 0.75));
 `
 
@@ -70,15 +70,16 @@ const bottomTicks = (width: number) => css`
   display: flex;
   justify-content: space-between;
   width: ${width}px;
-  height: 8px;
+  height: 10px;
   margin-top: ${MODE_TICK_GAP};
+  overflow: visible;
 `
 
 const blackTick = css`
   width: 1.5px;
   height: 7px;
   background-color: #000;
-  filter: blur(${HUD_TEXT_BLUR});
+  ${hudTickBlur};
 `
 
 export const ModeItem = ({

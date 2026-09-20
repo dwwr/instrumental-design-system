@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react  */
 
 import { css } from '@emotion/react'
-import { hudTextBlur } from '../styles'
+import { hudTextBlur, HUD_TEXT_BLUR } from '../styles'
 
 interface TimerLabelProps {
   japaneseText: string
@@ -98,7 +98,7 @@ const indicator = css`
   );
   width: 20%;
   align-self: stretch;
-  filter: drop-shadow(0 0 4px #e00000)
+  filter: blur(${HUD_TEXT_BLUR}) drop-shadow(0 0 4px #e00000)
     drop-shadow(0 0 6px rgba(224, 0, 0, 0.75));
 `
 

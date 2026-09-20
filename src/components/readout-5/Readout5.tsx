@@ -6,10 +6,10 @@ import TimerMask from './timer-mask.svg?react'
 import { TimerLabel } from './molecules/TimerLabel'
 import { ModeRow } from './molecules/mode-row/ModeRow'
 import type { ModeId } from './molecules/mode-row/ModeRow'
-import { HUD_AMBER, hudTextBlur } from './styles'
+import { HUD_AMBER, HUD_TICK, hudTextBlur, hudTickBlur } from './styles'
 
 const orangeYellow = HUD_AMBER
-const tickColor = 'rgb(214, 242, 182)'
+const tickColor = HUD_TICK
 const amberGlow = 'rgba(255, 152, 20, 1)'
 
 const container = css`
@@ -162,6 +162,7 @@ const point = css`
   height: 7px;
   width: 2px;
   background-color: ${tickColor};
+  ${hudTickBlur};
 `
 
 export interface Readout5Props {
