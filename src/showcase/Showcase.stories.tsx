@@ -21,8 +21,12 @@ import {
 import { Readout4 } from '../components/readout-4/Readout4'
 import { DataLabel as Readout4DataLabel } from '../components/readout-4/molecules/data-label/DataLabel'
 import { BarSegment } from '../components/readout-4/molecules/segment/BarSegment'
-import { Timer, TimerProps } from '../components/readout-5/molecules/timer/Timer'
-import { Default as TimerDefault } from '../components/readout-5/molecules/timer/Timer.stories'
+import { Readout5 } from '../components/readout-5/Readout5'
+import { Running as Readout5Running } from '../components/readout-5/Readout5.stories'
+import {
+  ModeRow,
+  type ModeId,
+} from '../components/readout-5/molecules/mode-row/ModeRow'
 
 const meta: Meta = {
   title: 'Showcase',
@@ -571,22 +575,104 @@ const Readout4MoleculesDemo = () => {
   )
 }
 
-const TimerDemo = () => (
-  <div
-    style={{
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '0.75rem',
-    }}
-  >
-    <div style={showcaseLabelStyle}>Timer</div>
-    <div style={{ width: '300px', height: '100px' }}>
-      <Timer {...(TimerDefault.args as TimerProps)} />
+const READOUT5_DESIGN_WIDTH = 900
+const READOUT5_DESIGN_HEIGHT = 580
+
+const Readout5Demo = () => {
+  const isMobile = useIsMobile()
+  const frameRef = useRef<HTMLDivElement>(null)
+  const [scale, setScale] = useState(1)
+
+  useEffect(() => {
+    if (!isMobile) {
+      setScale(1)
+      return
+    }
+
+    const frame = frameRef.current
+    if (!frame) return
+
+    const update = () => {
+      setScale(Math.min(1, frame.clientWidth / READOUT5_DESIGN_WIDTH))
+    }
+
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(frame)
+    return () => observer.disconnect()
+  }, [isMobile])
+
+  return (
+    <div
+      style={{
+        width: '80%',
+        maxWidth: '100%',
+        minWidth: 0,
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0.75rem',
+      }}
+    >
+      <div style={showcaseLabelStyle}>Active Time Remaining Readout</div>
+      <div
+        ref={frameRef}
+        style={{
+          width: '100%',
+          height: READOUT5_DESIGN_HEIGHT * scale,
+          overflow: 'hidden',
+        }}
+      >
+        <div
+          style={{
+            width: isMobile ? READOUT5_DESIGN_WIDTH : '100%',
+            height: READOUT5_DESIGN_HEIGHT,
+            backgroundColor: 'black',
+            boxSizing: 'border-box',
+            transform: isMobile ? `scale(${scale})` : undefined,
+            transformOrigin: 'top left',
+          }}
+        >
+          <Readout5 {...Readout5Running.args} />
+        </div>
+      </div>
     </div>
-  </div>
-)
+  )
+}
+
+const ModeRowDemo = () => {
+  const [activeMode, setActiveMode] = useState<ModeId>('stop')
+
+  return (
+    <div
+      style={{
+        width: '100%',
+        maxWidth: '100%',
+        minWidth: 0,
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0.75rem',
+      }}
+    >
+      <div style={showcaseLabelStyle}>Mode Row - click to change mode</div>
+      <div
+        style={{
+          width: '100%',
+          padding: '2.5rem 2rem',
+          boxSizing: 'border-box',
+          background:
+            'linear-gradient(90deg, rgba(163,26,10,1) 0%, rgba(105,217,28,1) 50%, rgba(52,155,135,1) 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <ModeRow activeMode={activeMode} onModeClick={setActiveMode} />
+      </div>
+    </div>
+  )
+}
 
 export const Canvas: Story = {
   render: () => (
@@ -615,7 +701,8 @@ export const Canvas: Story = {
       <Readout2Row />
       <Readout4Demo />
       <Readout4MoleculesDemo />
-      <TimerDemo />
+      <Readout5Demo />
+      <ModeRowDemo />
     </div>
   ),
 }
